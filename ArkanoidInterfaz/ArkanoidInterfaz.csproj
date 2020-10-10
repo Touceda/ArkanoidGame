@@ -65,6 +65,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -84,6 +85,27 @@
       <Project>{2c37852d-debb-4694-a71e-c7472df4fb16}</Project>
       <Name>ArkanoidMotor</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Barra1.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ArkanoidFondo.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Barra2.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Barra3.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Barra4.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Barra5.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Barra6.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

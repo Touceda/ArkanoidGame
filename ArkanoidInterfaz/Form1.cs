@@ -17,25 +17,20 @@ namespace ArkanoidInterfaz
         {
             InitializeComponent();
         }
-        Juego Juego = new Juego();
+        Juego Juego;
         private void Form1_Load(object sender, EventArgs e)
         {
+            Juego = new Juego();
+
+
             Refresh();
         }
         private void Form1_Paint(object sender, PaintEventArgs e)
         {
             Graphics Graph = e.Graphics;
-            var nivel = Juego.Nivel.NivelUno;
-
-
-            for (int fila = 0; fila < Nivel.GetLength(0); fila++)
-            {
-                for (int columna = 0; columna < Nivel.GetLength(1); columna++)
-                {
-                    
-                }
-            }
-
+            Bitmap b = new Bitmap(Properties.Resources.ArkanoidFondo);
+            Graph.DrawImage(b, new Rectangle(0, 0, 800,1000));
+            Juego.DrawAll(Graph);
 
 
 
@@ -43,11 +38,6 @@ namespace ArkanoidInterfaz
         }
 
 
-        void DrawOn(Graphics grap, Nivel lvl)
-        {
-
-
-        }
 
      
     }

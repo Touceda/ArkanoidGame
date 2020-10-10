@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace ArkanoidInterfaz.Properties {
+namespace ArkanoidMotor.Properties {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace ArkanoidInterfaz.Properties {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("ArkanoidInterfaz.Properties.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("ArkanoidMotor.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -57,16 +57,6 @@ namespace ArkanoidInterfaz.Properties {
             }
             set {
                 resourceCulture = value;
-            }
-        }
-        
-        /// <summary>
-        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap ArkanoidFondo {
-            get {
-                object obj = ResourceManager.GetObject("ArkanoidFondo", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
