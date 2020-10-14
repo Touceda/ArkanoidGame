@@ -12,35 +12,47 @@ using System.Threading.Tasks;
 namespace ArkanoidMotor
 {
     public class Juego
-    {
-        private Bitmap[] BarrasImagenes;
-
-
-        public Nivel Nivel;
+    { 
         public GameObject[,] NivelJugable;
-        private int fila;
-        private int columna;
+        public BarraJugador BarraJugador;
 
+        private Bitmap[] BarrasImagenes;
         public Juego()
         {
-            BarrasImagenes = GenerarImagenes();
-            Nivel = new Nivel(BarrasImagenes);
-            NivelJugable = Nivel.GenerarNivel(1);
+            BarraJugador = new BarraJugador(new Point(350, 960), Properties.Resources.BarraPlayer, 2);
+
+
+            BarrasImagenes = GenerarImagenes(); //Guardo en un array de Bitmaps Todas las imagenes de las barras
+            Nivel Nivel = new Nivel(BarrasImagenes);//Creo el nivel
+            NivelJugable = Nivel.GenerarNivel(1);//Guardo el nivel generado
+            //Extraigo la fila y columna del nivel
             fila = Nivel.fila;
             columna = Nivel.columna;
 
-            Nivel = null;
-        
+            Nivel = null;//Libero el espacio de memoria que ocupa nivel, eliminando su referencia
         }
 
-        public void UpdateAll()
+
+        private int fila;//Filas del nivel
+        private int columna;//Columnas del nivel
+
+        public void UpdateAll() //Actualiza todos los objetos 1 ves
         {
+            this.BarraJugador.Update();
 
-
+            for (int i = 0; i < fila; i++)
+            {
+                for (int x = 0; x < columna; x++)
+                {
+                    NivelJugable[i, x].Update();
+                }
+            }
         }
 
-        public void DrawAll(Graphics Graph)
+        public void DrawAll(Graphics Graph)//Dibuja Todos los objetos 1 ves
         {
+            this.BarraJugador.Draw(Graph);
+
             for (int i = 0; i < fila; i++)
             {
                 for (int x = 0; x < columna; x++)
@@ -63,9 +75,6 @@ namespace ArkanoidMotor
             Barras[6] = new Bitmap(Properties.Resources.Barra6);
             return Barras;
         }
-     
-
-
-
+    
     }
 }

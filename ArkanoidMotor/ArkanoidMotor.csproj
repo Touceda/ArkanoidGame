@@ -43,10 +43,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BarraJugador.cs" />
     <Compile Include="GameObject.cs" />
     <Compile Include="Juego.cs" />
     <Compile Include="Jugador.cs" />
     <Compile Include="Nivel.cs" />
+    <Compile Include="Pelota.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -77,6 +79,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Barra6.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\BarraPlayer.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\BarraPlayerConPowerUp.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
