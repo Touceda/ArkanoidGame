@@ -15,12 +15,13 @@ namespace ArkanoidMotor
     { 
         public GameObject[,] NivelJugable;
         public BarraJugador BarraJugador;
+        public Pelota Pelota;
 
         private Bitmap[] BarrasImagenes;
         public Juego()
         {
             BarraJugador = new BarraJugador(new Point(350, 960), Properties.Resources.BarraPlayer, 2);
-
+            Pelota = new Pelota(new PointF(387, 936), Properties.Resources.pelota, 1);
 
             BarrasImagenes = GenerarImagenes(); //Guardo en un array de Bitmaps Todas las imagenes de las barras
             Nivel Nivel = new Nivel(BarrasImagenes);//Creo el nivel
@@ -52,6 +53,7 @@ namespace ArkanoidMotor
         public void DrawAll(Graphics Graph)//Dibuja Todos los objetos 1 ves
         {
             this.BarraJugador.Draw(Graph);
+            this.Pelota.Draw(Graph);
 
             for (int i = 0; i < fila; i++)
             {

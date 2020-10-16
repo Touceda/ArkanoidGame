@@ -81,10 +81,16 @@
     <None Include="Resources\Barra6.jpg" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\BarraPlayerConPowerUp.png" />
+  </ItemGroup>
+  <ItemGroup>
     <None Include="Resources\BarraPlayer.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\BarraPlayerConPowerUp.png" />
+    <None Include="Resources\PlayerVida.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\pelota.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -20,6 +20,7 @@ namespace ArkanoidMotor
             this.MiImagenConPowerUp = Properties.Resources.BarraPlayerConPowerUp;
             this.Vidas = 2;
             this.MiTamaño = new SizeF(100,20);
+            this.ImagenVidas = Properties.Resources.PlayerVida;
         }
 
         private HashSet<Keys> pressedKeys = new HashSet<Keys>();
@@ -46,8 +47,16 @@ namespace ArkanoidMotor
             this.MiCoordenada = coordenada;
         }
 
+        Bitmap ImagenVidas;
         public override void Draw(Graphics Graph)
         {
+            int dist = 1000;
+            for (int i = 0; i < Vidas; i++)
+            {
+                dist -= 80;
+                Graph.DrawImage(ImagenVidas, new RectangleF(new PointF(0, dist), new SizeF(17, 80)));
+            }
+
             if (PowerUp == true)
             {
                 Graph.DrawImage(MiImagenConPowerUp, new RectangleF(MiCoordenada,MiTamaño));

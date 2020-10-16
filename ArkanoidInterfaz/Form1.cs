@@ -24,7 +24,7 @@ namespace ArkanoidInterfaz
         {
             Juego = new Juego();
             ActualizarGame.Enabled = true;
-            lastStep = Environment.TickCount;         
+            //lastStep = Environment.TickCount;         
         }
         private void Form1_Paint(object sender, PaintEventArgs e)
         {
@@ -38,18 +38,18 @@ namespace ArkanoidInterfaz
         {
             this.Text = e.X + " " + e.Y;
         }
-        private float lastStep = -1;
+        //private float lastStep = -1;
         private void ActualizarGame_Tick(object sender, EventArgs e)
         {
-            float now = Environment.TickCount;
-            float delta = (now -lastStep) / 1000;
-            if (delta > 0)
-            {
+            //float now = Environment.TickCount;
+            //float delta = (now -lastStep) / 1000;
+            //if (delta > 0)
+            //{
 
                 Juego.UpdateAll();//Actualizo el juego 
-                lastStep = now;
+                //lastStep = now;
                 Refresh();//Una ves Actualizado lo mando a dibujar
-            }
+            //}
                 
         }
 
