@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
-
-
+using System.Windows.Forms;
 
 namespace ArkanoidMotor
 {
@@ -37,31 +37,32 @@ namespace ArkanoidMotor
         private int fila;//Filas del nivel
         private int columna;//Columnas del nivel
 
-        public void UpdateAll() //Actualiza todos los objetos 1 ves
+        public void UpdateAll(Keys tecla) //Actualiza todos los objetos 1 ves
         {
+            BarraJugador.Tecla = tecla;
             this.BarraJugador.Update();
+            this.Pelota.Update();
 
-            for (int i = 0; i < fila; i++)
-            {
-                for (int x = 0; x < columna; x++)
-                {
-                    NivelJugable[i, x].Update();
-                }
-            }
+            //for (int i = 0; i < fila; i++)
+            //{
+            //    for (int x = 0; x < columna; x++)
+            //    {
+            //        NivelJugable[i, x].Update();
+            //    }
+            //}
         }
-
         public void DrawAll(Graphics Graph)//Dibuja Todos los objetos 1 ves
         {
             this.BarraJugador.Draw(Graph);
             this.Pelota.Draw(Graph);
 
-            for (int i = 0; i < fila; i++)
-            {
-                for (int x = 0; x < columna; x++)
-                {
-                    NivelJugable[i, x].Draw(Graph);
-                }
-            }
+            //for (int i = 0; i < fila; i++)
+            //{
+            //    for (int x = 0; x < columna; x++)
+            //    {
+            //        NivelJugable[i, x].Draw(Graph);
+            //    }
+            //}
         }
 
 
@@ -77,6 +78,9 @@ namespace ArkanoidMotor
             Barras[6] = new Bitmap(Properties.Resources.Barra6);
             return Barras;
         }
-    
+        public void EventPause(Graphics dibujarPausa)
+        {
+            dibujarPausa.DrawImage(Properties.Resources.Pausa, new RectangleF(75, 300, 650, 325));
+        }
     }
 }

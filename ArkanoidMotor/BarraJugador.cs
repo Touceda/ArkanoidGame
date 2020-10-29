@@ -23,24 +23,26 @@ namespace ArkanoidMotor
             this.ImagenVidas = Properties.Resources.PlayerVida;
         }
 
-        private HashSet<Keys> pressedKeys = new HashSet<Keys>();
+        private Keys tecla;
+        public Keys Tecla { get { return tecla; } set { tecla = value; }}
         public override void Update()
         {
             var coordenada = MiCoordenada;
-            if (pressedKeys.Contains(Keys.Left) || pressedKeys.Contains(Keys.A))
+            if (tecla == Keys.D || tecla == Keys.Right)
             {
-                if (coordenada.X <= 720)
+                if (coordenada.X <= 675)
                 {
-                    coordenada.X += 100;
+                    coordenada.X += 10;
                 }
-               
+
             }
 
-            if (pressedKeys.Contains(Keys.Right) || pressedKeys.Contains(Keys.D)) 
+            if (tecla == Keys.A || tecla == Keys.Left)
             {
-                if (coordenada.X >= 80)
+
+                if (coordenada.X >= 25)
                 {
-                    coordenada.X -= 100;
+                    coordenada.X -= 10;
                 }
             }
 
