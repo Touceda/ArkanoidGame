@@ -31,7 +31,8 @@ namespace ArkanoidInterfaz
                  | ControlStyles.UserPaint
                  | ControlStyles.AllPaintingInWmPaint,
                  true);
-            //lastStep = Environment.TickCount;         
+            //lastStep = Environment.TickCount; 
+            
         }
         
         Bitmap Fondo = new Bitmap(Properties.Resources.ArkanoidFondo);

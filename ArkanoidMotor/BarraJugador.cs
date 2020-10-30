@@ -12,14 +12,14 @@ namespace ArkanoidMotor
     {
         private Bitmap MiImagenConPowerUp;
         private bool PowerUp = false;
-        public BarraJugador(PointF point, Bitmap imagen = null, int vida = 0)
+        public BarraJugador(Point point, Bitmap[] imagen = null, int vida = 0)
         : base(point, imagen, vida)
         {
             this.MiCoordenada = point;
             this.MiImagen = imagen;
             this.MiImagenConPowerUp = Properties.Resources.BarraPlayerConPowerUp;
             this.Vidas = 2;
-            this.MiTamaño = new SizeF(100,20);
+            this.MiTamaño = new Size(100,20);
             this.ImagenVidas = Properties.Resources.PlayerVida;
         }
 
@@ -65,7 +65,7 @@ namespace ArkanoidMotor
             }
             else
             {
-                Graph.DrawImage(MiImagen, new RectangleF(MiCoordenada, MiTamaño));
+                Graph.DrawImage(MiImagen[8], new RectangleF(MiCoordenada, MiTamaño));
             }
         }
 
