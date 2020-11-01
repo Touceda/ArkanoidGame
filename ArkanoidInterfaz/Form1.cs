@@ -55,7 +55,6 @@ namespace ArkanoidInterfaz
         }
         //private float lastStep = -1;
         private Keys tecla;
- 
         private void ActualizarGame_Tick(object sender, EventArgs e)
         {
             if (pausa)
@@ -64,11 +63,16 @@ namespace ArkanoidInterfaz
             }
             else
             {
-                tecla = Keys.N;
-                Juego.UpdateAll(tecla);//Actualizo el juego 
-                Refresh();//Una ves Actualizado lo mando a dibujar
+                if (Juego.Derrota == false)
+                {
+                    Juego.UpdateAll(tecla);//Actualizo el juego         
+                    Refresh();//Una ves Actualizado lo mando a dibujar
+                    Juego.CondicionDerrota();
+                }
             }
-            
+
+          
+
         }
 
         private bool pausa = false;
@@ -80,6 +84,11 @@ namespace ArkanoidInterfaz
             {
                 pausa = !pausa;
             }
+        }
+
+        private void Form1_KeyUp(object sender, KeyEventArgs e)
+        {
+            tecla = Keys.N;
         }
     }
 }

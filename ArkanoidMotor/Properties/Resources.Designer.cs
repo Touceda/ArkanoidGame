@@ -163,6 +163,36 @@ namespace ArkanoidMotor.Properties {
         /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap PildoraInmortal {
+            get {
+                object obj = ResourceManager.GetObject("PildoraInmortal", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap PildoraMiltiBola {
+            get {
+                object obj = ResourceManager.GetObject("PildoraMiltiBola", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap PildoraVida {
+            get {
+                object obj = ResourceManager.GetObject("PildoraVida", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap PlayerVida {
             get {
                 object obj = ResourceManager.GetObject("PlayerVida", resourceCulture);

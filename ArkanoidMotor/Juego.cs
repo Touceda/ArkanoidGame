@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.IO;
@@ -15,7 +16,10 @@ namespace ArkanoidMotor
     { 
         public GameObject[,] NivelJugable;   
         public BarraJugador BarraJugador;
-        public Pelota Pelota;
+        public List<Pelota> Pelotas = new List<Pelota>();
+        public List<PowerUp> PowerUps = new List<PowerUp>();
+        private bool derrota = false;
+        public bool Derrota { get { return derrota; } set { derrota = value; } }
 
         private Bitmap[] Imagenes;
         public Juego()
@@ -23,7 +27,7 @@ namespace ArkanoidMotor
             Imagenes = GenerarImagenes(); //Guardo en un array de Bitmaps Todas las imagenes
 
             BarraJugador = new BarraJugador(new Point(350, 960), Imagenes, 2);
-            Pelota = new Pelota(new Point(387, 936), Imagenes, 1);
+            Pelotas.Add(new Pelota(new Point(387, 936), Imagenes, 1));
 
             
             Nivel Nivel = new Nivel(Imagenes);//Creo el nivel
@@ -45,28 +49,58 @@ namespace ArkanoidMotor
             BarraJugador.Tecla = tecla;
             this.BarraJugador.Update();
 
-            this.Pelota.anguloDeColicion = textoDeColicion;
-            this.Pelota.Update();
-
-            textoDeColicion = "";
-
-            for (int i = 0; i < fila; i++)
+            foreach (var Pelota in Pelotas)
             {
-                for (int x = 0; x < columna; x++) //Recorro todas las barras y si detecto una colicion, guardo un string diciendo que parte de la pelota coliciono, y luego cierro el metodo con un return (Si coliciona con un objeto, no lo dejo calculando los demas, ya que solo puede colicionar una sola ves)
+                if (Pelota.Vidas == 1) 
                 {
-                    string anguloDeColicion = NivelJugable[i, x].CalcularColicion(Pelota.pArriba, Pelota.pAbajo, Pelota.pDerecha, Pelota.pIzquierda);
-                    if ( anguloDeColicion != "")
+                    Pelota.anguloDeColicion = textoDeColicion;
+                    Pelota.PtsColicionDeBarra = BarraJugador.CalcularPtsColicion();
+                    Pelota.Update();
+                    textoDeColicion = "";
+                }   
+            }
+
+            foreach (var powerUp in PowerUps)
+            {
+                powerUp.UpdatePw();
+            }
+
+
+            foreach (var Pelota in Pelotas)
+            {
+                for (int i = 0; i < fila; i++)
+                {
+                    for (int x = 0; x < columna; x++) //Recorro todas las barras y si detecto una colicion, guardo un string diciendo que parte de la pelota coliciono, y luego cierro el metodo con un return (Si coliciona con un objeto, no lo dejo calculando los demas, ya que solo puede colicionar una sola ves)
                     {
-                        textoDeColicion = anguloDeColicion;
-                        return;
+                        string anguloDeColicion = NivelJugable[i, x].CalcularColicion(Pelota.pArriba, Pelota.pAbajo, Pelota.pDerecha, Pelota.pIzquierda);
+                        if (anguloDeColicion != "")
+                        {
+                            textoDeColicion = anguloDeColicion;
+                            if (NivelJugable[i, x].generePowerUp != null)
+                            {
+                                PowerUps.Add(NivelJugable[i, x].generePowerUp);
+                            }
+                        }
                     }
                 }
-            }
+            }               
         }
         public void DrawAll(Graphics Graph)//Dibuja Todos los objetos 1 ves
         {
             this.BarraJugador.Draw(Graph);
-            this.Pelota.Draw(Graph);
+
+            foreach (var Pelota in Pelotas)
+            {
+                if (Pelota.Vidas == 1) 
+                {
+                    Pelota.Draw(Graph);
+                }
+            }
+
+            foreach (var powerUp in PowerUps)
+            {
+                powerUp.DrawPw(Graph);
+            }
 
             for (int i = 0; i < fila; i++)
             {
@@ -74,9 +108,45 @@ namespace ArkanoidMotor
                 {
                     NivelJugable[i, x].Draw(Graph);
                 }
-            }
+            } 
         }
+        //private bool perdiUnaVida = f
+        public void CondicionDerrota()
+        {
+            int count = 0; //Contador de pelotas activas
+            float vidas;
 
+            foreach (var Pelota in Pelotas)
+            {
+                if (Pelota.Vidas == 1)
+                {
+                    count++;
+                }
+            }
+
+            if (count == 0)
+            {
+                BarraJugador.Vidas--;
+                vidas = BarraJugador.Vidas;
+                if (vidas >= 0) 
+                {               
+                    Pelotas = new List<Pelota>();
+                    Pelotas.Add(new Pelota(new Point(387, 936), Imagenes, 1));
+                    BarraJugador.MiCoordenada = new Point(350, 960);
+                    //perdiUnaVida = true;
+                }
+                else
+                {
+                    Derrota = true;
+                    //perdiUnaVida = true;
+                }               
+            }
+            else
+            {
+                return; //No hago nada
+            }
+
+        }
 
         private Bitmap[] GenerarImagenes()
         {

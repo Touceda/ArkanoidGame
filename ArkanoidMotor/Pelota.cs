@@ -27,9 +27,7 @@ namespace ArkanoidMotor
                 MovHorizontalX = rnd.Next(-9, -6);
             }
             
-            MovVerticalY = rnd.Next(-9, -6);
-
-            
+            MovVerticalY = rnd.Next(-9, -6);      
         }
 
         public Point pArriba;
@@ -43,6 +41,7 @@ namespace ArkanoidMotor
             CalcularPuntos();
             CalcularColicionConObjetos();
             CalcularColicionConParedes();
+            CalcularColicionConBarra();
             Mover();
         }
 
@@ -62,18 +61,15 @@ namespace ArkanoidMotor
         {
             switch (anguloDeColicion)
             {
-                case "Arriba": { MovVerticalY = rnd.Next(3, 9); break; }
-                case "Arbajo": { MovVerticalY = rnd.Next(-9, -6); break; }
-                case "Derecha": { MovHorizontalX = rnd.Next(-9, -6); break; }
-                case "Izquierda": { MovHorizontalX = rnd.Next(6, 9); break; }
+                case "Arriba": { MovVerticalY = rnd.Next(4, 9); break; }
+                case "Arbajo": { MovVerticalY = rnd.Next(-9, -4); break; }
+                case "Derecha": { MovHorizontalX = rnd.Next(-9, -4); break; }
+                case "Izquierda": { MovHorizontalX = rnd.Next(4, 9); break; }
                 default:
                     break;
             }
             anguloDeColicion = "";
         }
-
-
-
 
         Random rnd = new Random();
         private void CalcularColicionConParedes()
@@ -85,8 +81,9 @@ namespace ArkanoidMotor
 
             if (pAbajo.Y >= 1000)
             {
-                
-                MovVerticalY = rnd.Next(-9, -6);
+                Vidas = 0;
+                MovVerticalY = 0;
+                MovHorizontalX = 0;
             }
 
             if (pDerecha.X >= 780)
@@ -100,11 +97,33 @@ namespace ArkanoidMotor
             }
         }
 
+        public List<Point> PtsColicionDeBarra;
+        private void CalcularColicionConBarra()
+        {
+            foreach (var point in PtsColicionDeBarra)
+            {
+
+                if (pAbajo == point)
+                {
+                    MovVerticalY = rnd.Next(-9, -6);
+                }
+                else if (pDerecha == point)
+                {
+                    MovHorizontalX = rnd.Next(-12, -8);
+                    MovVerticalY = rnd.Next(-9, -6);
+                }
+                else if (pIzquierda == point)
+                {
+                    MovHorizontalX = rnd.Next(8, 12);
+                    MovVerticalY = rnd.Next(-9, -6);
+                }
+            }
+        }
+
         private void Mover()
         {
             MiCoordenada = new Point(MiCoordenada.X + MovHorizontalX, MiCoordenada.Y + MovVerticalY);
         }
-
 
 
         public override void Draw(Graphics Graph)

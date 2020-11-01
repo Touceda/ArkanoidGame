@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net.NetworkInformation;
 using System.Runtime;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -13,8 +14,8 @@ namespace ArkanoidMotor
 {
     public class GameObject
     {
-        private float vidas;
-        public float Vidas { get { return vidas; } set { vidas = value; } }
+        private int vidas;
+        public int Vidas { get { return vidas; } set { vidas = value; } }
 
         private Bitmap[] miImagen;
         public Bitmap[] MiImagen { get { return miImagen; } set { miImagen = value; } }
@@ -25,6 +26,7 @@ namespace ArkanoidMotor
         private Size miTamaño;
         public Size MiTamaño { get { return miTamaño; } set { miTamaño = value; }}
 
+        Random Rand = new Random();
         
         public GameObject(Point point, Bitmap[] imagen = null, int vida = 0, int tamañoLargo = 0)
         {
@@ -79,9 +81,10 @@ namespace ArkanoidMotor
         }
         int count = 0;
         Stopwatch SW = new Stopwatch();
+        internal PowerUp generePowerUp;
         public virtual void Update()
         {
-            if (SW.ElapsedMilliseconds > 1000) 
+            if (SW.ElapsedMilliseconds > 200) //Sistema para que no desintegre el bloque al chocar con la pelota
             {
                 count = 0;
             }
@@ -96,6 +99,12 @@ namespace ArkanoidMotor
             if (vidas <= 0)  
             {            
                 PtosDeColicion = null;
+                /*int probabilidad = Rand.Next(0, 100);*/
+                //if (probabilidad <=10)
+                //{
+                int pildora = Rand.Next(0, 3);
+                this.generePowerUp = new PowerUp(this.MiCoordenada,pildora);
+                //}
             }
         }
 
@@ -106,7 +115,6 @@ namespace ArkanoidMotor
                 Graph.DrawImage(this.MiImagen[int.Parse(vidas.ToString())], new RectangleF(MiCoordenada, MiTamaño));//Le puedo pasar el wh y he para ajustar el tamaño (Revisar para futuros niveles)
             }    
         }
-
         internal List<Point> CalcularPtsColicion(int tamañoLargo)
         {
             Point coordenada = MiCoordenada;

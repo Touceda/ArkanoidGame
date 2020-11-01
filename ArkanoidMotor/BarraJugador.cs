@@ -11,7 +11,10 @@ namespace ArkanoidMotor
     public class BarraJugador : GameObject
     {
         private Bitmap MiImagenConPowerUp;
-        private bool PowerUp = false;
+
+        private bool powerUp = false;
+        public bool PowerUp { get { return powerUp; } set { powerUp = value; } }
+
         public BarraJugador(Point point, Bitmap[] imagen = null, int vida = 0)
         : base(point, imagen, vida)
         {
@@ -68,6 +71,19 @@ namespace ArkanoidMotor
                 Graph.DrawImage(MiImagen[8], new RectangleF(MiCoordenada, MiTamaño));
             }
         }
+        public List<Point> CalcularPtsColicion()
+        {
+            Point coordenada = MiCoordenada; //Es de 17 - 80 el tamaño
+            List<Point> Puntos = new List<Point>();          
 
+            for (int x = 0; x <= 80; x++)
+            {
+                for (int y = 0; y <= 17; y++)
+                {
+                    Puntos.Add(new Point(coordenada.X + x, coordenada.Y + y));
+                }
+            }
+            return Puntos;
+        }
     }
 }

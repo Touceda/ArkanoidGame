@@ -148,6 +148,15 @@
   <data name="pelota" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\pelota.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="PildoraInmortal" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\PildoraInmortal.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="PildoraMiltiBola" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\PildoraMiltiBola.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="PildoraVida" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\PildoraVida.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="PlayerVida" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\PlayerVida.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
