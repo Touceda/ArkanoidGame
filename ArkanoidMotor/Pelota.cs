@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -16,26 +18,29 @@ namespace ArkanoidMotor
             this.MiCoordenada = point;
             this.MiImagen = imagen;
             this.Vidas = vida;
-            this.MiTamaño = new Size(25, 25);
+            this.MiTamaño = new Size(26, 26);
 
             if (rnd.Next(0, 2) == 1) 
             {
-                MovHorizontalX = rnd.Next(6, 9);           
+                MovHorizontalX = rnd.Next(8, 11);           
             }
             else
             {
-                MovHorizontalX = rnd.Next(-9, -6);
+                MovHorizontalX = rnd.Next(-11, -8);
             }
             
-            MovVerticalY = rnd.Next(-9, -6);      
+            MovVerticalY = rnd.Next(-11, -8);      
         }
 
         public Point pArriba;
         public Point pAbajo;
         public Point pDerecha;
         public Point pIzquierda;
-        int MovHorizontalX;
-        int MovVerticalY; //Si es positivo se mueve hacia abajo (Esta al reves)
+        private int MovHorizontalX;
+        private int MovVerticalY; //Si es positivo se mueve hacia abajo (Esta al reves)
+        public int movX { get{ return MovHorizontalX; }set { MovHorizontalX = value; } }
+        public int movY { get { return MovVerticalY; } set { MovVerticalY = value; } }
+
         public override void Update()
         {
             CalcularPuntos();
@@ -49,11 +54,11 @@ namespace ArkanoidMotor
         {
             Point Actual = new Point(int.Parse(MiCoordenada.X.ToString()), int.Parse(MiCoordenada.Y.ToString())); //Copio mi coordenada actual en un nuevo punto
 
-            pArriba = new Point(Actual.X, Actual.Y - 25);
-            pAbajo = new Point(Actual.X, Actual.Y + 25);
+            pArriba = new Point(Actual.X, Actual.Y - 13);
+            pAbajo = new Point(Actual.X, Actual.Y + 13);
 
-            pDerecha = new Point(Actual.X + 25, Actual.Y);
-            pIzquierda = new Point(Actual.X - 25, Actual.Y);
+            pDerecha = new Point(Actual.X + 13, Actual.Y);
+            pIzquierda = new Point(Actual.X - 13, Actual.Y);
         }
 
         public string anguloDeColicion="";
@@ -61,10 +66,10 @@ namespace ArkanoidMotor
         {
             switch (anguloDeColicion)
             {
-                case "Arriba": { MovVerticalY = rnd.Next(4, 9); break; }
-                case "Arbajo": { MovVerticalY = rnd.Next(-9, -4); break; }
-                case "Derecha": { MovHorizontalX = rnd.Next(-9, -4); break; }
-                case "Izquierda": { MovHorizontalX = rnd.Next(4, 9); break; }
+                case "Arriba": { MovVerticalY = rnd.Next(8, 11); break; }
+                case "Arbajo": { MovVerticalY = rnd.Next(-11, -8); break; }
+                case "Derecha": { MovHorizontalX = rnd.Next(-11, -8); break; }
+                case "Izquierda": { MovHorizontalX = rnd.Next(8, 11); break; }
                 default:
                     break;
             }
@@ -72,29 +77,45 @@ namespace ArkanoidMotor
         }
 
         Random rnd = new Random();
+        public Stopwatch SW = new Stopwatch();
+        public void IniciarSW()
+        {
+            SW.Restart();
+        }
         private void CalcularColicionConParedes()
         {
             if (pArriba.Y <= 0)
             {
-                MovVerticalY = rnd.Next(6,9);
+                MovVerticalY = rnd.Next(8,11);
+            }     
+
+            if (pDerecha.X >= 770)
+            {
+                MovHorizontalX = rnd.Next(-11, -8);
+            }
+
+            if (pIzquierda.X <= 0) 
+            {
+                MovHorizontalX = rnd.Next(8, 11);
             }
 
             if (pAbajo.Y >= 1000)
             {
+                if (SW.IsRunning == true)
+                {
+                    if (SW.ElapsedMilliseconds < 20000)
+                    {
+                        MovVerticalY = rnd.Next(-11, 8);
+                    }
+                    else
+                    {
+                        SW.Stop();
+                        Vidas = 0;
+                    }
+                    return;
+                }
                 Vidas = 0;
-                MovVerticalY = 0;
-                MovHorizontalX = 0;
-            }
-
-            if (pDerecha.X >= 780)
-            {
-                MovHorizontalX = rnd.Next(-9, -6);
-            }
-
-            if (pIzquierda.X<=-5)
-            {
-                MovHorizontalX = rnd.Next(6, 9);
-            }
+            }  
         }
 
         public List<Point> PtsColicionDeBarra;
@@ -105,17 +126,17 @@ namespace ArkanoidMotor
 
                 if (pAbajo == point)
                 {
-                    MovVerticalY = rnd.Next(-9, -6);
+                    MovVerticalY = rnd.Next(-11, -8);
                 }
                 else if (pDerecha == point)
                 {
-                    MovHorizontalX = rnd.Next(-12, -8);
-                    MovVerticalY = rnd.Next(-9, -6);
+                    MovHorizontalX = rnd.Next(-11, -8);
+                    MovVerticalY = rnd.Next(-11, -8);
                 }
                 else if (pIzquierda == point)
                 {
                     MovHorizontalX = rnd.Next(8, 12);
-                    MovVerticalY = rnd.Next(-9, -6);
+                    MovVerticalY = rnd.Next(-11, -8);
                 }
             }
         }
@@ -124,7 +145,6 @@ namespace ArkanoidMotor
         {
             MiCoordenada = new Point(MiCoordenada.X + MovHorizontalX, MiCoordenada.Y + MovVerticalY);
         }
-
 
         public override void Draw(Graphics Graph)
         {

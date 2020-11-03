@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -24,12 +25,19 @@ namespace ArkanoidMotor
             this.Vidas = 2;
             this.MiTamaño = new Size(100,20);
             this.ImagenVidas = Properties.Resources.PlayerVida;
+
         }
 
         private Keys tecla;
         public Keys Tecla { get { return tecla; } set { tecla = value; }}
-        public override void Update()
+
+        public Stopwatch SW = new Stopwatch();
+        public void IniciarSW()
         {
+            SW.Restart();
+        }
+        public override void Update()
+        {          
             var coordenada = MiCoordenada;
             if (tecla == Keys.D || tecla == Keys.Right)
             {
@@ -55,6 +63,21 @@ namespace ArkanoidMotor
         Bitmap ImagenVidas;
         public override void Draw(Graphics Graph)
         {
+            
+            if (SW.IsRunning)
+            {
+                if (SW.ElapsedMilliseconds < 20000)
+                {
+                    int segTranscurridos = SW.Elapsed.Seconds;
+                    int segRestantes = 20 - segTranscurridos;
+                    Graph.DrawString("  "+segRestantes.ToString()+" sec Inmortal",new Font("Arial", 17),new SolidBrush(Color.Red),600,950);
+                }
+                else
+                {
+                    SW.Stop();
+                }
+            }
+
             int dist = 1000;
             for (int i = 0; i < Vidas; i++)
             {

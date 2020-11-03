@@ -47,26 +47,27 @@ namespace ArkanoidMotor
         public void UpdateAll(Keys tecla) //Actualiza todos los objetos 1 ves
         {
             BarraJugador.Tecla = tecla;
-            this.BarraJugador.Update();
+            this.BarraJugador.Update();//Update de la barra
+            List<Point> BarraPtsColicion = BarraJugador.CalcularPtsColicion();
 
-            foreach (var Pelota in Pelotas)
+            for (int pelota = 0; pelota < Pelotas.Count; pelota++)//Update de pelotas
             {
-                if (Pelota.Vidas == 1) 
+                
+                if (Pelotas[pelota].Vidas <= 0)
                 {
-                    Pelota.anguloDeColicion = textoDeColicion;
-                    Pelota.PtsColicionDeBarra = BarraJugador.CalcularPtsColicion();
-                    Pelota.Update();
+                    Pelotas.Remove(Pelotas[pelota]);  
+                }
+                else
+                {
+                    Pelotas[pelota].anguloDeColicion = textoDeColicion;
+                    Pelotas[pelota].PtsColicionDeBarra = BarraPtsColicion;
+                    Pelotas[pelota].Update();
                     textoDeColicion = "";
-                }   
+                }
             }
+          
 
-            foreach (var powerUp in PowerUps)
-            {
-                powerUp.UpdatePw();
-            }
-
-
-            foreach (var Pelota in Pelotas)
+            foreach (var Pelota in Pelotas) //Recorro las pelotas y veo si colicionaron con los bloques
             {
                 for (int i = 0; i < fila; i++)
                 {
@@ -83,7 +84,20 @@ namespace ArkanoidMotor
                         }
                     }
                 }
-            }               
+            }
+
+            for (int powerUp = 0; powerUp < PowerUps.Count; powerUp++)
+            {
+                if (PowerUps[powerUp].SaliDelMapa)
+                {
+                    PowerUps.Remove(PowerUps[powerUp]);
+                }
+                else if(PowerUps[powerUp].UpdatePw(BarraPtsColicion))
+                {
+                    PowerUps[powerUp].ActivarPowerUp(this);
+                    PowerUps.Remove(PowerUps[powerUp]);
+                }
+            }
         }
         public void DrawAll(Graphics Graph)//Dibuja Todos los objetos 1 ves
         {

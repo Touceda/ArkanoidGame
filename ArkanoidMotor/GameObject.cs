@@ -26,7 +26,6 @@ namespace ArkanoidMotor
         private Size miTamaño;
         public Size MiTamaño { get { return miTamaño; } set { miTamaño = value; }}
 
-        Random Rand = new Random();
         
         public GameObject(Point point, Bitmap[] imagen = null, int vida = 0, int tamañoLargo = 0)
         {
@@ -97,14 +96,16 @@ namespace ArkanoidMotor
             }
 
             if (vidas <= 0)  
-            {            
+            {
                 PtosDeColicion = null;
-                /*int probabilidad = Rand.Next(0, 100);*/
-                //if (probabilidad <=10)
-                //{
-                int pildora = Rand.Next(0, 3);
-                this.generePowerUp = new PowerUp(this.MiCoordenada,pildora);
-                //}
+                Random rnd = new Random();
+
+                int probabilidad = rnd.Next(0, 100);
+                if (probabilidad <= 12) //12% de que se active algun powerUp
+                {
+                    int pildora = rnd.Next(1, 4);
+                    this.generePowerUp = new PowerUp(this.MiCoordenada, pildora);
+                }
             }
         }
 
