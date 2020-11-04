@@ -26,13 +26,13 @@ namespace ArkanoidMotor
         private Size miTamaño;
         public Size MiTamaño { get { return miTamaño; } set { miTamaño = value; }}
 
-        
-        public GameObject(Point point, Bitmap[] imagen = null, int vida = 0, int tamañoLargo = 0)
+
+        public GameObject(Point point, Bitmap[] imagen = null, int vida = 0, int tamañoLargo = 0, int probabilidadPowerUp = 0)
         {
             miCoordenada = point;
             this.MiImagen = imagen;
             this.vidas = vida;
-
+            this.ProbabilidadPowerUp = probabilidadPowerUp;
             this.miTamaño = new Size(tamañoLargo,32);
 
             if (vida != 0) 
@@ -103,27 +103,28 @@ namespace ArkanoidMotor
         int count = 0;
         Stopwatch SW = new Stopwatch();
         internal PowerUp generePowerUp;
+        internal int ProbabilidadPowerUp;
         public virtual void Update()
         {
-            //if (SW.ElapsedMilliseconds > 200) //Sistema para que no desintegre el bloque al chocar con la pelota
-            //{
-            //    count = 0;
-            //}
+            if (SW.ElapsedMilliseconds > 100) //Sistema para que no desintegre el bloque al chocar con la pelota
+            {
+                count = 0;
+            }
 
-            //if (count == 0)
-            //{
-            //    count++;
-            //    vidas += -1;
-            //    SW.Restart();
-            //}
-            vidas += -1;
+            if (count == 0)
+            {
+                count++;
+                vidas += -1;
+                SW.Restart();
+            }
+       
             if (vidas <= 0)  
             {
                 PtosDeColicion = null;
                 Random rnd = new Random();
 
                 int probabilidad = rnd.Next(0, 100);
-                if (probabilidad <= 50) //14% de que se active algun powerUp
+                if (probabilidad <= ProbabilidadPowerUp)
                 {
                     int pildora = rnd.Next(1, 5);
                     this.generePowerUp = new PowerUp(this.MiCoordenada, pildora);
@@ -134,8 +135,8 @@ namespace ArkanoidMotor
         {
             if (vidas > 0) 
             {
-                Graph.DrawImage(this.MiImagen[int.Parse(vidas.ToString())], new RectangleF(MiCoordenada, MiTamaño));//Le puedo pasar el wh y he para ajustar el tamaño (Revisar para futuros niveles)
-            }    
+                Graph.DrawImage(this.MiImagen[vidas], new RectangleF(MiCoordenada, MiTamaño));//Le puedo pasar el wh y he para ajustar el tamaño (Revisar para futuros niveles)
+            }     
         }
 
 

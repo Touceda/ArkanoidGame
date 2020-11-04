@@ -33,7 +33,7 @@ namespace ArkanoidMotor
 
             
             Nivel Nivel = new Nivel(Imagenes);//Creo el nivel
-            NivelJugable = Nivel.GenerarNivel(1);//Guardo el nivel generado
+            NivelJugable = Nivel.GenerarNivel(4);//Guardo el nivel generado
 
             //Extraigo la fila y columna del nivel
             fila = Nivel.fila;
