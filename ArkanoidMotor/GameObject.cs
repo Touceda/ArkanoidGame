@@ -43,7 +43,7 @@ namespace ArkanoidMotor
 
         internal List<Point> PtosDeColicion;
        
-        internal string CalcularColicion(Point pArriba, Point pAbajo, Point pDerecha, Point pIzquierda)
+        internal string CalcularColicionPelota(Point pArriba, Point pAbajo, Point pDerecha, Point pIzquierda)
         {
             if (PtosDeColicion == null)
             {
@@ -52,24 +52,26 @@ namespace ArkanoidMotor
 
             foreach (var point in PtosDeColicion)
             {
-                
+
+                if (pAbajo == point)
+                {
+                    Update();
+                    return "Abajo";
+                }
 
                 if (pArriba == point)
                 {
                     Update();
                     return "Arriba";
-                }
-                else if (pAbajo == point)
-                {
-                    Update();
-                    return "Abajo";
-                }
-                else if (pDerecha == point)
+                }                           
+                
+                if (pDerecha == point)
                 {
                     Update();
                     return "Derecha";
                 }
-                else if (pIzquierda == point)
+                
+                if (pIzquierda == point)
                 {
                     Update();
                     return "Izquierda";
@@ -78,37 +80,56 @@ namespace ArkanoidMotor
 
             return "";
         }
+        internal bool CalcularColicionDisparo(Point pArriba)
+        {
+            Point aux = pArriba;
+            if (PtosDeColicion == null)
+            {
+                return false;
+            }
+
+            foreach (var point in PtosDeColicion)
+            {
+                if (aux == point)
+                {
+                    this.vidas += -1;
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         int count = 0;
         Stopwatch SW = new Stopwatch();
         internal PowerUp generePowerUp;
         public virtual void Update()
         {
-            if (SW.ElapsedMilliseconds > 200) //Sistema para que no desintegre el bloque al chocar con la pelota
-            {
-                count = 0;
-            }
+            //if (SW.ElapsedMilliseconds > 200) //Sistema para que no desintegre el bloque al chocar con la pelota
+            //{
+            //    count = 0;
+            //}
 
-            if (count == 0)
-            {
-                count++;
-                vidas += -1;
-                SW.Restart();
-            }
-
+            //if (count == 0)
+            //{
+            //    count++;
+            //    vidas += -1;
+            //    SW.Restart();
+            //}
+            vidas += -1;
             if (vidas <= 0)  
             {
                 PtosDeColicion = null;
                 Random rnd = new Random();
 
                 int probabilidad = rnd.Next(0, 100);
-                if (probabilidad <= 12) //12% de que se active algun powerUp
+                if (probabilidad <= 50) //14% de que se active algun powerUp
                 {
-                    int pildora = rnd.Next(1, 4);
+                    int pildora = rnd.Next(1, 5);
                     this.generePowerUp = new PowerUp(this.MiCoordenada, pildora);
                 }
             }
         }
-
         public virtual void Draw(Graphics Graph)
         {
             if (vidas > 0) 
@@ -116,6 +137,8 @@ namespace ArkanoidMotor
                 Graph.DrawImage(this.MiImagen[int.Parse(vidas.ToString())], new RectangleF(MiCoordenada, MiTamaño));//Le puedo pasar el wh y he para ajustar el tamaño (Revisar para futuros niveles)
             }    
         }
+
+
         internal List<Point> CalcularPtsColicion(int tamañoLargo)
         {
             Point coordenada = MiCoordenada;

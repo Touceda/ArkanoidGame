@@ -143,6 +143,16 @@ namespace ArkanoidMotor.Properties {
         /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Disparo {
+            get {
+                object obj = ResourceManager.GetObject("Disparo", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Pausa {
             get {
                 object obj = ResourceManager.GetObject("Pausa", resourceCulture);
@@ -156,6 +166,16 @@ namespace ArkanoidMotor.Properties {
         internal static System.Drawing.Bitmap pelota {
             get {
                 object obj = ResourceManager.GetObject("pelota", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap PildoraDisparo {
+            get {
+                object obj = ResourceManager.GetObject("PildoraDisparo", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

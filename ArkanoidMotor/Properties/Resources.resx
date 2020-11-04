@@ -142,11 +142,17 @@
   <data name="BarraPlayerConPowerUp" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\BarraPlayerConPowerUp.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="Disparo" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Disparo.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="Pausa" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Pausa.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="pelota" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\pelota.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="PildoraDisparo" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\PildoraDisparo.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="PildoraInmortal" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\PildoraInmortal.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>

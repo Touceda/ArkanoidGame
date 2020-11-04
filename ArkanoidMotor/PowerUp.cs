@@ -38,6 +38,7 @@ namespace ArkanoidMotor
                 case 1: { this.miImagen = Properties.Resources.PildoraVida; break; }
                 case 2: { this.miImagen = Properties.Resources.PildoraMiltiBola; break; }
                 case 3: { this.miImagen = Properties.Resources.PildoraInmortal; break; }
+                case 4: { this.miImagen = Properties.Resources.PildoraDisparo; break; }
 
                 default:
                     break;
@@ -103,6 +104,7 @@ namespace ArkanoidMotor
                 case 1: { PwExtraLife(juego); break; }
                 case 2: { PwMultiplicarPelotas(juego); break; }
                 case 3: { PwInmortabilidad(juego); break; }
+                case 4: { PwDisparar(juego); break; }
                 default:
                     break;
             }
@@ -141,11 +143,16 @@ namespace ArkanoidMotor
 
         public void PwInmortabilidad(Juego juego)
         {
-            juego.BarraJugador.IniciarSW();
+            juego.BarraJugador.IniciarSW(1);
             for (int pelota = 0; pelota < juego.Pelotas.Count; pelota++)
             {
                 juego.Pelotas[pelota].IniciarSW();
             }
+        }
+
+        public void PwDisparar(Juego juego)
+        {
+            juego.BarraJugador.IniciarSW(2);  
         }
     }
 }

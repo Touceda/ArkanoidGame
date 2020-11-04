@@ -22,14 +22,16 @@ namespace ArkanoidMotor
 
             if (rnd.Next(0, 2) == 1) 
             {
-                MovHorizontalX = rnd.Next(8, 11);           
+                MovHorizontalX = rnd.Next(7, 10);           
             }
             else
             {
-                MovHorizontalX = rnd.Next(-11, -8);
+                MovHorizontalX = rnd.Next(-10, -7);
             }
             
-            MovVerticalY = rnd.Next(-11, -8);      
+            MovVerticalY = rnd.Next(-10, -7);
+
+            CalcularPuntos();
         }
 
         public Point pArriba;
@@ -48,17 +50,25 @@ namespace ArkanoidMotor
             CalcularColicionConParedes();
             CalcularColicionConBarra();
             Mover();
+            CalcularPuntos();
         }
 
         private void CalcularPuntos() //Calculo los 4 puntos de la pelota para luego ver si coliciona con algo
         {
-            Point Actual = new Point(int.Parse(MiCoordenada.X.ToString()), int.Parse(MiCoordenada.Y.ToString())); //Copio mi coordenada actual en un nuevo punto
+            Point Actual = MiCoordenada; //Copio mi coordenada actual en un nuevo punto
+            // 26-26
 
-            pArriba = new Point(Actual.X, Actual.Y - 13);
-            pAbajo = new Point(Actual.X, Actual.Y + 13);
+            pArriba = new Point(Actual.X + 13, Actual.Y);
+            pAbajo = new Point(Actual.X + 13, Actual.Y + 26);
 
-            pDerecha = new Point(Actual.X + 13, Actual.Y);
-            pIzquierda = new Point(Actual.X - 13, Actual.Y);
+            pDerecha = new Point(Actual.X + 26, Actual.Y + 13);
+            pIzquierda = new Point(Actual.X, Actual.Y + 13);
+
+            //pArriba = new Point(Actual.X, Actual.Y - 13);
+            //pAbajo = new Point(Actual.X, Actual.Y + 13);
+
+            //pDerecha = new Point(Actual.X + 13, Actual.Y);
+            //pIzquierda = new Point(Actual.X - 13, Actual.Y);
         }
 
         public string anguloDeColicion="";
@@ -66,10 +76,10 @@ namespace ArkanoidMotor
         {
             switch (anguloDeColicion)
             {
-                case "Arriba": { MovVerticalY = rnd.Next(8, 11); break; }
-                case "Arbajo": { MovVerticalY = rnd.Next(-11, -8); break; }
-                case "Derecha": { MovHorizontalX = rnd.Next(-11, -8); break; }
-                case "Izquierda": { MovHorizontalX = rnd.Next(8, 11); break; }
+                case "Arriba": { MovVerticalY = rnd.Next(7, 10); break; }
+                case "Abajo": { MovVerticalY = rnd.Next(-10, -7); break; }
+                case "Derecha": { MovHorizontalX = rnd.Next(-10, -7); break; }
+                case "Izquierda": { MovHorizontalX = rnd.Next(7, 10); break; }
                 default:
                     break;
             }
@@ -84,19 +94,19 @@ namespace ArkanoidMotor
         }
         private void CalcularColicionConParedes()
         {
-            if (pArriba.Y <= 0)
+            if (pArriba.Y <= 24)
             {
-                MovVerticalY = rnd.Next(8,11);
+                MovVerticalY = rnd.Next(7,10);
             }     
 
-            if (pDerecha.X >= 770)
+            if (pDerecha.X >= 783)
             {
-                MovHorizontalX = rnd.Next(-11, -8);
+                MovHorizontalX = rnd.Next(-10, -7);
             }
 
-            if (pIzquierda.X <= 0) 
+            if (pIzquierda.X <= 18) 
             {
-                MovHorizontalX = rnd.Next(8, 11);
+                MovHorizontalX = rnd.Next(7, 10);
             }
 
             if (pAbajo.Y >= 1000)
@@ -105,7 +115,7 @@ namespace ArkanoidMotor
                 {
                     if (SW.ElapsedMilliseconds < 20000)
                     {
-                        MovVerticalY = rnd.Next(-11, 8);
+                        MovVerticalY = rnd.Next(-10, 7);
                     }
                     else
                     {
@@ -126,29 +136,36 @@ namespace ArkanoidMotor
 
                 if (pAbajo == point)
                 {
-                    MovVerticalY = rnd.Next(-11, -8);
+                    MovVerticalY = rnd.Next(-10, -7);
                 }
                 else if (pDerecha == point)
                 {
-                    MovHorizontalX = rnd.Next(-11, -8);
-                    MovVerticalY = rnd.Next(-11, -8);
+                    MovHorizontalX = rnd.Next(-10, -7);
+                    MovVerticalY = rnd.Next(-10, -7);
                 }
                 else if (pIzquierda == point)
                 {
-                    MovHorizontalX = rnd.Next(8, 12);
-                    MovVerticalY = rnd.Next(-11, -8);
+                    MovHorizontalX = rnd.Next(7, 10);
+                    MovVerticalY = rnd.Next(-10, -7);
                 }
             }
         }
 
         private void Mover()
         {
-            MiCoordenada = new Point(MiCoordenada.X + MovHorizontalX, MiCoordenada.Y + MovVerticalY);
+            var coordenada = MiCoordenada;
+            coordenada.X += movX;
+            coordenada.Y += movY;
+            MiCoordenada = coordenada;
         }
 
         public override void Draw(Graphics Graph)
         {
             Graph.DrawImage(MiImagen[7], new RectangleF(MiCoordenada, MiTamaño));
+            Graph.DrawEllipse(Pens.Red,new RectangleF(pArriba,new Size(3,3)));
+            Graph.DrawEllipse(Pens.Red, new RectangleF(pAbajo, new Size(3, 3)));
+            Graph.DrawEllipse(Pens.Red, new RectangleF(pDerecha,new Size(3, 3)));
+            Graph.DrawEllipse(Pens.Red, new RectangleF(pIzquierda,new Size(3, 3)));
         }
         
     }

@@ -18,6 +18,8 @@ namespace ArkanoidMotor
         public BarraJugador BarraJugador;
         public List<Pelota> Pelotas = new List<Pelota>();
         public List<PowerUp> PowerUps = new List<PowerUp>();
+        public List<Disparo> Disparos = new List<Disparo>();
+
         private bool derrota = false;
         public bool Derrota { get { return derrota; } set { derrota = value; } }
 
@@ -43,62 +45,127 @@ namespace ArkanoidMotor
 
         private int fila;//Filas del nivel
         private int columna;//Columnas del nivel
-        private string textoDeColicion = "";
+  
         public void UpdateAll(Keys tecla) //Actualiza todos los objetos 1 ves
         {
+            List<Point> PtsColicionBarras = UpdateBarraPlayer(tecla);
+
+            UpdateColicionPelota();
+            UpdatePelota(PtsColicionBarras);
+           
+            UpdateDisparos();
+            UpdatePowerUps(PtsColicionBarras);
+        }
+
+        #region Metodos Ejecutados por el UpdateAll (Actualiza objetos)
+        private List<Point> UpdateBarraPlayer(Keys tecla)
+        {
+            //Actualizo la barra del jugador y reviso si cree algun disparo (En el caso de tenel el powerUp Activo)
             BarraJugador.Tecla = tecla;
             this.BarraJugador.Update();//Update de la barra
-            List<Point> BarraPtsColicion = BarraJugador.CalcularPtsColicion();
+            List<Point> PtsColicionDeBarra = BarraJugador.CalcularPtsColicion();
+            if (BarraJugador.SWdisparo.IsRunning == true && BarraJugador.bala1 != null)
+            {
+                Disparos.Add(BarraJugador.bala1);
+                BarraJugador.bala1 = null;
+            }
+            return PtsColicionDeBarra;
+        }
+        private void UpdateColicionPelota()
+        {
+            //Recorro las pelotas VIVAS y los BLOQUES y miro si colicionaron con los bloques, Despues compruebo si genere un PowerUp
+            foreach (var Pelota in Pelotas)
+            {  
+                UpdatePelotaColicionBloqueABloque(Pelota);
+            }
+        }
 
+        private Pelota UpdatePelotaColicionBloqueABloque(Pelota Pelota)
+        {
+            //Recorro todas las barras y si detecto una colicion, guardo un string diciendo que parte de la pelota coliciono
+            for (int i = 0; i < fila; i++)
+            {
+                for (int x = 0; x < columna; x++) 
+                {
+                    //Aca vei si la barra coliciono con la pelota
+                    string anguloDeColicion = NivelJugable[i, x].CalcularColicionPelota(Pelota.pArriba, Pelota.pAbajo, Pelota.pDerecha, Pelota.pIzquierda);
+                    if (anguloDeColicion != "")
+                    {
+                        Pelota.anguloDeColicion = anguloDeColicion;
+                        //Miro si se genero un powerUp
+                        if (NivelJugable[i, x].generePowerUp != null)
+                        {
+                            PowerUps.Add(NivelJugable[i, x].generePowerUp);
+                        }
+                        return Pelota;
+                    }
+                }
+            }
+            return Pelota;
+        }
+
+        private void UpdatePelota(List<Point> PtsColicionBarras)
+        {
+            //Actualizo la coordenada de las pelotas y elimino las que murieron
             for (int pelota = 0; pelota < Pelotas.Count; pelota++)//Update de pelotas
             {
-                
                 if (Pelotas[pelota].Vidas <= 0)
                 {
-                    Pelotas.Remove(Pelotas[pelota]);  
+                    Pelotas.Remove(Pelotas[pelota]);
                 }
                 else
                 {
-                    Pelotas[pelota].anguloDeColicion = textoDeColicion;
-                    Pelotas[pelota].PtsColicionDeBarra = BarraPtsColicion;
+                    Pelotas[pelota].PtsColicionDeBarra = PtsColicionBarras;
                     Pelotas[pelota].Update();
-                    textoDeColicion = "";
                 }
             }
-          
-
-            foreach (var Pelota in Pelotas) //Recorro las pelotas y veo si colicionaron con los bloques
+        }
+        private void UpdateDisparos()
+        {
+            //aca recorro los disparos en busca de coliciones
+            foreach (var bala in Disparos)
             {
                 for (int i = 0; i < fila; i++)
                 {
                     for (int x = 0; x < columna; x++) //Recorro todas las barras y si detecto una colicion, guardo un string diciendo que parte de la pelota coliciono, y luego cierro el metodo con un return (Si coliciona con un objeto, no lo dejo calculando los demas, ya que solo puede colicionar una sola ves)
                     {
-                        string anguloDeColicion = NivelJugable[i, x].CalcularColicion(Pelota.pArriba, Pelota.pAbajo, Pelota.pDerecha, Pelota.pIzquierda);
-                        if (anguloDeColicion != "")
+                        if (NivelJugable[i, x].CalcularColicionDisparo(new Point(bala.MiCoordenada.X+10,bala.MiCoordenada.Y)) == true)
                         {
-                            textoDeColicion = anguloDeColicion;
-                            if (NivelJugable[i, x].generePowerUp != null)
-                            {
-                                PowerUps.Add(NivelJugable[i, x].generePowerUp);
-                            }
+                            bala.saliDelMapaOcolicione = true;
                         }
                     }
                 }
             }
 
+            //aca recorro las balas Actualizandolas y eliminando las que ya cumplieron su funcion
+            for (int disparo = 0; disparo < Disparos.Count; disparo++)
+            {
+                Disparos[disparo].Update();
+                if (Disparos[disparo].saliDelMapaOcolicione == true)
+                {
+                    Disparos.Remove(Disparos[disparo]);
+                }
+            }
+        }
+        private void UpdatePowerUps(List<Point> PtsColicionBarras) 
+        {
+            //Recorro y actualizo los PowerUps y veo si colicionaron o no con la barra
             for (int powerUp = 0; powerUp < PowerUps.Count; powerUp++)
             {
                 if (PowerUps[powerUp].SaliDelMapa)
                 {
                     PowerUps.Remove(PowerUps[powerUp]);
                 }
-                else if(PowerUps[powerUp].UpdatePw(BarraPtsColicion))
+                else if (PowerUps[powerUp].UpdatePw(PtsColicionBarras))
                 {
                     PowerUps[powerUp].ActivarPowerUp(this);
                     PowerUps.Remove(PowerUps[powerUp]);
                 }
             }
         }
+
+        #endregion
+
         public void DrawAll(Graphics Graph)//Dibuja Todos los objetos 1 ves
         {
             this.BarraJugador.Draw(Graph);
@@ -111,20 +178,27 @@ namespace ArkanoidMotor
                 }
             }
 
-            foreach (var powerUp in PowerUps)
-            {
-                powerUp.DrawPw(Graph);
-            }
-
             for (int i = 0; i < fila; i++)
             {
                 for (int x = 0; x < columna; x++)
                 {
                     NivelJugable[i, x].Draw(Graph);
                 }
-            } 
+            }
+
+            foreach (var powerUp in PowerUps)
+            {
+                powerUp.DrawPw(Graph);
+            }
+
+      
+            foreach (var bala in Disparos)
+            {
+                bala.Draw(Graph);
+            }
+
         }
-        //private bool perdiUnaVida = f
+
         public void CondicionDerrota()
         {
             int count = 0; //Contador de pelotas activas

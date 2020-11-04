@@ -13,8 +13,8 @@ namespace ArkanoidMotor
     {
         private Bitmap MiImagenConPowerUp;
 
-        private bool powerUp = false;
-        public bool PowerUp { get { return powerUp; } set { powerUp = value; } }
+        //private bool powerUp = false;
+        //public bool PowerUp { get { return powerUp; } set { powerUp = value; } }
 
         public BarraJugador(Point point, Bitmap[] imagen = null, int vida = 0)
         : base(point, imagen, vida)
@@ -23,21 +23,32 @@ namespace ArkanoidMotor
             this.MiImagen = imagen;
             this.MiImagenConPowerUp = Properties.Resources.BarraPlayerConPowerUp;
             this.Vidas = 2;
-            this.MiTamaño = new Size(100,20);
+            this.MiTamaño = new Size(100, 20);
             this.ImagenVidas = Properties.Resources.PlayerVida;
 
         }
 
         private Keys tecla;
-        public Keys Tecla { get { return tecla; } set { tecla = value; }}
+        public Keys Tecla { get { return tecla; } set { tecla = value; } }
 
-        public Stopwatch SW = new Stopwatch();
-        public void IniciarSW()
+        public Stopwatch SWinmortal = new Stopwatch();
+        public Stopwatch SWdisparo = new Stopwatch();
+        public Stopwatch SWdisparoPorSec = new Stopwatch();
+
+        public void IniciarSW(int tipo)
         {
-            SW.Restart();
+            if (tipo == 1)
+            {
+                SWinmortal.Restart();
+            }
+            else
+            {
+                SWdisparo.Restart();
+                SWdisparoPorSec.Restart();
+            }
         }
         public override void Update()
-        {          
+        {
             var coordenada = MiCoordenada;
             if (tecla == Keys.D || tecla == Keys.Right)
             {
@@ -57,26 +68,28 @@ namespace ArkanoidMotor
                 }
             }
 
+            if (SWdisparo.IsRunning)
+            {
+                if (tecla == Keys.Space && SWdisparoPorSec.ElapsedMilliseconds >= 1000)
+                {
+                    GenerarBalas();
+                    SWdisparoPorSec.Restart();
+                }
+
+                if (SWdisparo.ElapsedMilliseconds > 15000)
+                {
+                    SWdisparo.Stop();
+                    SWdisparoPorSec.Stop();
+                }
+
+            }       
             this.MiCoordenada = coordenada;
         }
 
         Bitmap ImagenVidas;
         public override void Draw(Graphics Graph)
         {
-            
-            if (SW.IsRunning)
-            {
-                if (SW.ElapsedMilliseconds < 20000)
-                {
-                    int segTranscurridos = SW.Elapsed.Seconds;
-                    int segRestantes = 20 - segTranscurridos;
-                    Graph.DrawString("  "+segRestantes.ToString()+" sec Inmortal",new Font("Arial", 17),new SolidBrush(Color.Red),600,950);
-                }
-                else
-                {
-                    SW.Stop();
-                }
-            }
+            DrawHudAdicional(Graph);
 
             int dist = 1000;
             for (int i = 0; i < Vidas; i++)
@@ -85,9 +98,9 @@ namespace ArkanoidMotor
                 Graph.DrawImage(ImagenVidas, new RectangleF(new PointF(0, dist), new SizeF(17, 80)));
             }
 
-            if (PowerUp == true)
+            if (SWdisparo.IsRunning == true) 
             {
-                Graph.DrawImage(MiImagenConPowerUp, new RectangleF(MiCoordenada,MiTamaño));
+                Graph.DrawImage(MiImagenConPowerUp, new RectangleF(MiCoordenada, MiTamaño));
             }
             else
             {
@@ -97,7 +110,7 @@ namespace ArkanoidMotor
         public List<Point> CalcularPtsColicion()
         {
             Point coordenada = MiCoordenada; //Es de 17 - 80 el tamaño
-            List<Point> Puntos = new List<Point>();          
+            List<Point> Puntos = new List<Point>();
 
             for (int x = 0; x <= 80; x++)
             {
@@ -108,5 +121,32 @@ namespace ArkanoidMotor
             }
             return Puntos;
         }
+        private void DrawHudAdicional(Graphics Graph)
+        {
+            if (SWinmortal.IsRunning)
+            {
+                if (SWinmortal.ElapsedMilliseconds < 15000)
+                {
+                    int segTranscurridos = SWinmortal.Elapsed.Seconds;
+                    int segRestantes = 15 - segTranscurridos;
+                    Graph.DrawString("  " + segRestantes.ToString() + " sec Inmortal", new Font("Arial", 17), new SolidBrush(Color.Red), 600, 950);
+                }
+                else
+                {
+                    SWinmortal.Stop();
+                }
+            }
+        }
+
+
+        public Disparo bala1;
+        public void GenerarBalas()
+        {
+            bala1 = new Disparo(new Point(this.MiCoordenada.X +40, this.MiCoordenada.Y));
+        }
     }
 }
+
+
+
+        

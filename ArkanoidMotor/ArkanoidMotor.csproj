@@ -44,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BarraJugador.cs" />
+    <Compile Include="Disparo.cs" />
     <Compile Include="GameObject.cs" />
     <Compile Include="Juego.cs" />
     <Compile Include="Jugador.cs" />
@@ -104,6 +105,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\PildoraVida.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Disparo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\PildoraDisparo.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
