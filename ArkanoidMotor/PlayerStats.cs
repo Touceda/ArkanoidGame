@@ -16,7 +16,8 @@ namespace ArkanoidMotor
         public int NivelesCompletos { get { return nivelesCompletos; } set { nivelesCompletos = value; } }
 
         private int nivelesPerdidos;
-        public int NivelesPerdidos { get { return nivelesPerdidos; } set { nivelesPerdidos = value; } }
+        public int NivelesPerdidos 
+        { get { return nivelesPerdidos; } set { nivelesPerdidos = value; }}
 
         private int victorias;
         public int Victorias { get { return victorias; } set { victorias = value; } }

@@ -71,7 +71,6 @@ namespace ArkanoidMotor
             UpdateDisparos();
             UpdatePowerUps(PtsColicionBarras);
 
-            UpdatePlayerStats();
         }
 
         #region Metodos Ejecutados por el UpdateAll (Actualiza objetos)
@@ -97,7 +96,7 @@ namespace ArkanoidMotor
             }
         }
 
-        private Pelota UpdatePelotaColicionBloqueABloque(Pelota Pelota)
+        private void UpdatePelotaColicionBloqueABloque(Pelota Pelota)
         {
             //Recorro todas las barras y si detecto una colicion, guardo un string diciendo que parte de la pelota coliciono
             for (int i = 0; i < fila; i++)
@@ -116,11 +115,10 @@ namespace ArkanoidMotor
                         {
                             PowerUps.Add(NivelJugable[i, x].generePowerUp);
                         }
-                        return Pelota;
+                        return;
                     }
                 }
             }
-            return Pelota;
         }
 
         private void CalcularPts(int vidas)//La puntuacion Cambia segun el tipo de bloque
@@ -196,13 +194,17 @@ namespace ArkanoidMotor
                 }
             }
         }
-
         private void UpdatePlayerStats()
         {
-            Player.Puntuacion = Puntuacion;
-            if (Player.Puntuacion> Player.Stats.MaximaPuntuacion)
+            Player.Puntuacion = this.Puntuacion; //La puntuacion actual del jugador es la de la run
+            if (Player.Puntuacion > Player.Stats.MaximaPuntuacion)//Si los pts de la run superan al record, actualizo los stats
             {
                 Player.Stats.MaximaPuntuacion = Player.Puntuacion;
+            }
+
+            if (SW.IsRunning == false)//Si se paro el cronometro, es porque el lvl termino, asi que actualizo el tiempo jugado
+            {
+                Player.Stats.CalcularTiempoJugado(SW);
             }
         }
 
@@ -267,8 +269,9 @@ namespace ArkanoidMotor
                 else
                 {
                     SW.Stop();
+                    UpdatePlayerStats();
                     Player.Stats.CalcularTiempoJugado(SW);
-                    this.derrota = true;
+                    this.Derrota = true;
                 }               
             }
         }
@@ -294,50 +297,23 @@ namespace ArkanoidMotor
 
             if (bCount == 0)//Si no se encontraron bloques vivos
             {
-                Puntuacion += 3000 * (BarraJugador.Vidas + 1);
+                Puntuacion += 3000 * (BarraJugador.Vidas + 1); //Añado Pts Segun mis vidas
                 Player.NivelActual += 1;
                 if (Player.NivelActual >= 11)
                 {
                     SW.Stop();
-                    Player.Stats.CalcularTiempoJugado(SW);
-                    this.finDelJuego = true;
+                    UpdatePlayerStats();
+                    this.FinDelJuego = true;
                 }
                 else
                 {
                     SW.Stop();
-                    Player.Stats.CalcularTiempoJugado(SW);
-                    this.victoria = true;
+                    UpdatePlayerStats();                   
+                    this.Victoria = true;
                 }
             }
         }
 
-
-
-
-
-
-        //public void CrearNuevoNivel()
-        //{
-        //    Nivel nuevolvl = new Nivel(GenerarImagenes());
-        //    NivelJugable = nuevolvl.GenerarNivel(Nivel);
-        //    this.fila = nuevolvl.fila;
-        //    this.columna = nuevolvl.columna;
-        //    BarraJugador = new BarraJugador(new Point(350, 960), Imagenes, 2);
-
-        //    Pelotas = null;
-        //    PowerUps = null;
-        //    Disparos = null;
-
-        //    Pelotas = new List<Pelota>();
-        //    PowerUps = new List<PowerUp>();
-        //    Disparos = new List<Disparo>();
-        //    Pelotas.Add(new Pelota(new Point(387, 936), Imagenes, 1));
-
-        //    Puntuacion = 0;
-
-        //    nuevolvl = null;
-        //    SW.Restart();
-        //}
         private Bitmap[] GenerarImagenes()
         {
             Bitmap[] Imagenes = new Bitmap[9];

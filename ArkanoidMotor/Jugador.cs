@@ -25,6 +25,7 @@ namespace ArkanoidMotor
 
         private Usuario ConexionUsuario;
         private Estadisticas ConexionEstadisticas;
+        private InicioCierreDeSesion ConexionLogeo;
         public Jugador(string usuario, PlayerStats loadStats, int nivel = 1, int puntuacion = 0)
         {
             this.stats = loadStats;
@@ -34,6 +35,7 @@ namespace ArkanoidMotor
 
             ConexionUsuario = new Usuario();
             ConexionEstadisticas = new Estadisticas();
+            ConexionLogeo = new InicioCierreDeSesion();
         }
 
         public void ActualizarCuentaStats()
@@ -43,14 +45,19 @@ namespace ArkanoidMotor
             stats.Add(ConexionUsuario.Conexion.CrearParametro("@usuario", this.nombre));
             stats.Add(ConexionUsuario.Conexion.CrearParametro("@partidasjugadas", this.stats.PartidasJugadas));
             stats.Add(ConexionUsuario.Conexion.CrearParametro("@nivelescompletos", this.stats.NivelesCompletos));
-            stats.Add(ConexionUsuario.Conexion.CrearParametro("@nivelesperdidos", this.stats.NivelesCompletos));
+            stats.Add(ConexionUsuario.Conexion.CrearParametro("@nivelesperdidos", this.stats.NivelesPerdidos));
             stats.Add(ConexionUsuario.Conexion.CrearParametro("@victorias", this.stats.Victorias));
             stats.Add(ConexionUsuario.Conexion.CrearParametro("@derrotas", this.stats.Derrotas));
             stats.Add(ConexionUsuario.Conexion.CrearParametro("@puntuacionmasalta", this.stats.MaximaPuntuacion));
             stats.Add(ConexionUsuario.Conexion.CrearParametro("@tiempojugado", this.stats.TiempoJugado));
-            ConexionEstadisticas.ActualizarEstadisticas(stats);        
+            ConexionEstadisticas.ActualizarEstadisticas(stats);
+            //ConexionLogeo.ActualizarInicioCierre();
         }
 
+        public void CargarNuevoInicioCierreDeSesion()
+        {
+            ConexionLogeo.RegistrarNuevoInicio();
+        }
 
     }
 }

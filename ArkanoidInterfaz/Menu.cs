@@ -42,18 +42,16 @@ namespace ArkanoidInterfaz
 
 
         private void btbContinuar_Click(object sender, EventArgs e)
-        {
-            this.Juego = new Form1();
-            Juego.Player = Player;
+        {      
+            Juego = new Form1(Player);
             Juego.ShowDialog();
+            Juego.Close();
             ActualizarInterfaz();
         }
 
         private void btbNuevaPartida_Click(object sender, EventArgs e)
         {
-            this.Juego = new Form1();
-
-            if (Player.NivelActual >= 2)
+            if (Player.NivelActual > 1)
             {           
                 Player.Stats.Derrotas++;//Derrota por abandono
                 Player.Stats.PartidasJugadas++;//Cuenta como partida jugado
@@ -61,14 +59,16 @@ namespace ArkanoidInterfaz
 
             Player.NivelActual = 1;
             Player.Puntuacion = 0;
-            Juego.Player = Player;
+            Juego = new Form1(Player);
             Juego.ShowDialog();
+            Juego.Close();
             ActualizarInterfaz();
         }
 
         private void btbInstrucciones_Click(object sender, EventArgs e)
         {
             instrucciones.ShowDialog();
+            instrucciones.Close();
         }
 
         private void btbEstadisticas_Click(object sender, EventArgs e)

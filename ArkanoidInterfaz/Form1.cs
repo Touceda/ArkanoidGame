@@ -14,8 +14,9 @@ namespace ArkanoidInterfaz
 {
     public partial class Form1 : Form
     {
-        public Form1()
+        public Form1(Jugador Player)
         {
+            this.Player = Player;
             InitializeComponent();
         }
         public Jugador Player;
@@ -60,7 +61,7 @@ namespace ArkanoidInterfaz
             }
             else
             {
-                if (Juego.Derrota == false && Juego.Victoria == false && Juego.finDelJuego == false)
+                if (Juego.Derrota == false && Juego.Victoria == false && Juego.FinDelJuego == false)
                 {
                     Juego.UpdateAll(tecla);//Actualizo el juego         
                     Refresh();//Una ves Actualizado lo mando a dibujar
@@ -83,19 +84,35 @@ namespace ArkanoidInterfaz
 
                     if (Juego.Victoria == true)
                     {
+                        ActualizarGame.Enabled = false;
+                        DialogResult SegJugando = DialogResult.OK;
                         Player.Stats.NivelesCompletos++;
                         Player.ActualizarCuentaStats();
-                        Juego = new Juego(Player);
+                        
+                        SegJugando = MessageBox.Show("Nivel " + (Player.NivelActual - 1).ToString() + " COMPLETADO quieres pasar al siguiente nivel?", "Nivel COmpletado",MessageBoxButtons.YesNo);
+                        
+                        if (SegJugando == DialogResult.Yes)
+                        {
+                            Juego = new Juego(Player);
+                        }
+
+                        if (SegJugando == DialogResult.No)
+                        {
+                            this.Close();
+                        }
+                        ActualizarGame.Enabled = true;
                     }
 
-                    if (Juego.finDelJuego == true)
-                    {                                       
+                    if (Juego.FinDelJuego == true)
+                    {
+                        ActualizarGame.Enabled = false;
                         Player.Stats.PartidasJugadas++;
                         Player.Stats.NivelesCompletos++;
                         Player.Stats.Victorias++;
                         Player.NivelActual = 1;
                         Player.Puntuacion = 0;
                         Player.ActualizarCuentaStats();
+                        MessageBox.Show("Nivel 10" + " COMPLETADO, El juego a finalizado, fue añadida una Victoria a tus estadisticas", "FIN DEL JUEGO", MessageBoxButtons.OK);
                         this.Close();
                     }
                 }

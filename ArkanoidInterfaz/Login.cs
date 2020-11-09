@@ -58,8 +58,8 @@ namespace ArkanoidInterfaz
                 DataTable tablePlayers = ConexionUsuarios.ObtenerUsuario();//Obtengo todos los jugadores registrados
                 Player = BuscarJugador(tablePlayers);//Busco el player que va a jugar
 
+                Player.CargarNuevoInicioCierreDeSesion();
 
-                //Player = new Jugador(mensaje, Stats,ConexionUsuarios.NivelActual, ConexionUsuarios.PuntuacionActual);
                 this.Close();
             }
         }
