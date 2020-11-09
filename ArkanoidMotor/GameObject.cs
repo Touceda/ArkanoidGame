@@ -92,6 +92,11 @@ namespace ArkanoidMotor
             {
                 if (aux == point)
                 {
+                    if (vidas == 6) 
+                    {
+                        return false;
+                    }
+               
                     this.vidas += -1;
                     return true;
                 }
@@ -113,9 +118,16 @@ namespace ArkanoidMotor
 
             if (count == 0)
             {
-                count++;
-                vidas += -1;
-                SW.Restart();
+                if (vidas == 6)
+                {
+
+                }
+                else
+                {
+                    count++;
+                    vidas += -1;
+                    SW.Restart();
+                }    
             }
        
             if (vidas <= 0)  

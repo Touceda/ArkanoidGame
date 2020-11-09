@@ -18,11 +18,12 @@ namespace ArkanoidInterfaz
         {
             InitializeComponent();
         }
+        public Jugador Player;
         Juego Juego;
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            Juego = new Juego();
+            Juego = new Juego(Player);
             ActualizarGame.Interval = 16;
             ActualizarGame.Enabled = true;
 
@@ -31,7 +32,6 @@ namespace ArkanoidInterfaz
                  | ControlStyles.UserPaint
                  | ControlStyles.AllPaintingInWmPaint,
                  true);
-            //lastStep = Environment.TickCount; 
             
         }
         
@@ -40,6 +40,8 @@ namespace ArkanoidInterfaz
         Graphics Graph;
         private void Form1_Paint(object sender, PaintEventArgs e)
         {
+            
+            e.Graphics.DrawString("Puntuacion: " + Juego.Puntuacion, new Font("Arial", 20), new SolidBrush(Color.Black), 820, 20);
             Graph = e.Graphics;
             Graph.DrawImage(Fondo, FondoTamaño);
             Juego.DrawAll(Graph);
@@ -48,12 +50,7 @@ namespace ArkanoidInterfaz
                 Juego.EventPause(Graph);
             }
         }
-
-        private void Form1_MouseMove(object sender, MouseEventArgs e)
-        {
-            this.Text = e.X + " " + e.Y;
-        }
-        //private float lastStep = -1;
+ 
         private Keys tecla;
         private void ActualizarGame_Tick(object sender, EventArgs e)
         {
@@ -63,16 +60,46 @@ namespace ArkanoidInterfaz
             }
             else
             {
-                if (Juego.Derrota == false)
+                if (Juego.Derrota == false && Juego.Victoria == false && Juego.finDelJuego == false)
                 {
                     Juego.UpdateAll(tecla);//Actualizo el juego         
                     Refresh();//Una ves Actualizado lo mando a dibujar
+                    Juego.CondicionVictoria();
                     Juego.CondicionDerrota();
                 }
+                else
+                {
+                    Player = Juego.Player;
+                    if (Juego.Derrota == true)
+                    {
+                        Player.Stats.PartidasJugadas++;
+                        Player.Stats.Derrotas++;
+                        Player.Stats.NivelesPerdidos++;
+                        Player.NivelActual = 1;
+                        Player.Puntuacion = 0;
+                        Player.ActualizarCuentaStats();
+                        this.Close();
+                    }
+
+                    if (Juego.Victoria == true)
+                    {
+                        Player.Stats.NivelesCompletos++;
+                        Player.ActualizarCuentaStats();
+                        Juego = new Juego(Player);
+                    }
+
+                    if (Juego.finDelJuego == true)
+                    {                                       
+                        Player.Stats.PartidasJugadas++;
+                        Player.Stats.NivelesCompletos++;
+                        Player.Stats.Victorias++;
+                        Player.NivelActual = 1;
+                        Player.Puntuacion = 0;
+                        Player.ActualizarCuentaStats();
+                        this.Close();
+                    }
+                }
             }
-
-          
-
         }
 
         private bool pausa = false;
@@ -85,10 +112,14 @@ namespace ArkanoidInterfaz
                 pausa = !pausa;
             }
         }
-
         private void Form1_KeyUp(object sender, KeyEventArgs e)
         {
             tecla = Keys.N;
+        }
+
+        private void Form1_MouseMove(object sender, MouseEventArgs e)
+        {
+            this.Text = e.X + " " + e.Y;
         }
     }
 }

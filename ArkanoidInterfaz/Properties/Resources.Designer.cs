@@ -73,9 +73,9 @@ namespace ArkanoidInterfaz.Properties {
         /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Barra1 {
+        internal static System.Drawing.Bitmap PildoraDisparo {
             get {
-                object obj = ResourceManager.GetObject("Barra1", resourceCulture);
+                object obj = ResourceManager.GetObject("PildoraDisparo", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -83,9 +83,9 @@ namespace ArkanoidInterfaz.Properties {
         /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Barra2 {
+        internal static System.Drawing.Bitmap PildoraInmortal {
             get {
-                object obj = ResourceManager.GetObject("Barra2", resourceCulture);
+                object obj = ResourceManager.GetObject("PildoraInmortal", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -93,9 +93,9 @@ namespace ArkanoidInterfaz.Properties {
         /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Barra3 {
+        internal static System.Drawing.Bitmap PildoraMiltiBola {
             get {
-                object obj = ResourceManager.GetObject("Barra3", resourceCulture);
+                object obj = ResourceManager.GetObject("PildoraMiltiBola", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -103,29 +103,9 @@ namespace ArkanoidInterfaz.Properties {
         /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Barra4 {
+        internal static System.Drawing.Bitmap PildoraVida {
             get {
-                object obj = ResourceManager.GetObject("Barra4", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap Barra5 {
-            get {
-                object obj = ResourceManager.GetObject("Barra5", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap Barra6 {
-            get {
-                object obj = ResourceManager.GetObject("Barra6", resourceCulture);
+                object obj = ResourceManager.GetObject("PildoraVida", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

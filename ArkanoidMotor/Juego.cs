@@ -13,19 +13,34 @@ using System.Windows.Forms;
 namespace ArkanoidMotor
 {
     public class Juego
-    { 
+    {
+        public Jugador Player;
         public GameObject[,] NivelJugable;   
         public BarraJugador BarraJugador;
         public List<Pelota> Pelotas = new List<Pelota>();
         public List<PowerUp> PowerUps = new List<PowerUp>();
         public List<Disparo> Disparos = new List<Disparo>();
+        public int Puntuacion;
+        public Stopwatch SW = new Stopwatch();
+
 
         private bool derrota = false;
         public bool Derrota { get { return derrota; } set { derrota = value; } }
 
+        private bool victoria = false;
+        public bool Victoria { get { return victoria; } set { victoria = value; } }
+
+        public bool finDelJuego = false;
+        public bool FinDelJuego { get { return finDelJuego; } set { finDelJuego = value; } }
+
         private Bitmap[] Imagenes;
-        public Juego()
+        public Juego(Jugador PL)
         {
+            SW.Start();
+
+            this.Player = PL;
+            this.Puntuacion = Player.Puntuacion;
+
             Imagenes = GenerarImagenes(); //Guardo en un array de Bitmaps Todas las imagenes
 
             BarraJugador = new BarraJugador(new Point(350, 960), Imagenes, 2);
@@ -33,7 +48,7 @@ namespace ArkanoidMotor
 
             
             Nivel Nivel = new Nivel(Imagenes);//Creo el nivel
-            NivelJugable = Nivel.GenerarNivel(4);//Guardo el nivel generado
+            NivelJugable = Nivel.GenerarNivel(this.Player.NivelActual);//Guardo el nivel generado
 
             //Extraigo la fila y columna del nivel
             fila = Nivel.fila;
@@ -55,6 +70,8 @@ namespace ArkanoidMotor
            
             UpdateDisparos();
             UpdatePowerUps(PtsColicionBarras);
+
+            UpdatePlayerStats();
         }
 
         #region Metodos Ejecutados por el UpdateAll (Actualiza objetos)
@@ -85,12 +102,14 @@ namespace ArkanoidMotor
             //Recorro todas las barras y si detecto una colicion, guardo un string diciendo que parte de la pelota coliciono
             for (int i = 0; i < fila; i++)
             {
-                for (int x = 0; x < columna; x++) 
+                for (int x = 0; x < columna; x++)
                 {
                     //Aca vei si la barra coliciono con la pelota
                     string anguloDeColicion = NivelJugable[i, x].CalcularColicionPelota(Pelota.pArriba, Pelota.pAbajo, Pelota.pDerecha, Pelota.pIzquierda);
                     if (anguloDeColicion != "")
                     {
+                        CalcularPts(NivelJugable[i, x].Vidas);//Sumo los pts
+                        
                         Pelota.anguloDeColicion = anguloDeColicion;
                         //Miro si se genero un powerUp
                         if (NivelJugable[i, x].generePowerUp != null)
@@ -104,6 +123,20 @@ namespace ArkanoidMotor
             return Pelota;
         }
 
+        private void CalcularPts(int vidas)//La puntuacion Cambia segun el tipo de bloque
+        {
+            switch (vidas)
+            {
+                case 0: { Puntuacion += 600; break; }
+                case 1: { Puntuacion += 125; break; }
+                case 2: { Puntuacion += 350; break; }
+                case 3: { Puntuacion += 222; break; }
+                case 4: { Puntuacion += 100; break; }
+                case 6: { Puntuacion += 50; break; }
+                default:
+                    break;
+            }
+        }
         private void UpdatePelota(List<Point> PtsColicionBarras)
         {
             //Actualizo la coordenada de las pelotas y elimino las que murieron
@@ -164,6 +197,15 @@ namespace ArkanoidMotor
             }
         }
 
+        private void UpdatePlayerStats()
+        {
+            Player.Puntuacion = Puntuacion;
+            if (Player.Puntuacion> Player.Stats.MaximaPuntuacion)
+            {
+                Player.Stats.MaximaPuntuacion = Player.Puntuacion;
+            }
+        }
+
         #endregion
 
         public void DrawAll(Graphics Graph)//Dibuja Todos los objetos 1 ves
@@ -201,18 +243,18 @@ namespace ArkanoidMotor
 
         public void CondicionDerrota()
         {
-            int count = 0; //Contador de pelotas activas
+            int pCount = 0; //Contador de pelotas activas
             float vidas;
 
-            foreach (var Pelota in Pelotas)
+            foreach (var Pelota in Pelotas)//Recorro la pelota en busca de alguna viva
             {
                 if (Pelota.Vidas == 1)
                 {
-                    count++;
+                    pCount++;
                 }
             }
 
-            if (count == 0)
+            if (pCount == 0)//Si no tengo vidas
             {
                 BarraJugador.Vidas--;
                 vidas = BarraJugador.Vidas;
@@ -221,21 +263,81 @@ namespace ArkanoidMotor
                     Pelotas = new List<Pelota>();
                     Pelotas.Add(new Pelota(new Point(387, 936), Imagenes, 1));
                     BarraJugador.MiCoordenada = new Point(350, 960);
-                    //perdiUnaVida = true;
                 }
                 else
                 {
-                    Derrota = true;
-                    //perdiUnaVida = true;
+                    SW.Stop();
+                    Player.Stats.CalcularTiempoJugado(SW);
+                    this.derrota = true;
                 }               
             }
-            else
-            {
-                return; //No hago nada
-            }
+        }
+        public void CondicionVictoria()
+        {
+            int bCount = 0;//Contador de bloques vivos
 
+            foreach (var bloque in NivelJugable)
+            {
+                if (bloque.Vidas != 0 && bloque.Vidas != 6) //Si los bloques son 0 o 6, no cuentan como vivos
+                {
+                    if (bloque.Vidas < 0)//Si es menor a 0 esta muerto, pero si no cCount++
+                    {
+
+                    }
+                    else
+                    {
+                        bCount++;
+                    }
+                }
+            }
+        
+
+            if (bCount == 0)//Si no se encontraron bloques vivos
+            {
+                Puntuacion += 3000 * (BarraJugador.Vidas + 1);
+                Player.NivelActual += 1;
+                if (Player.NivelActual >= 11)
+                {
+                    SW.Stop();
+                    Player.Stats.CalcularTiempoJugado(SW);
+                    this.finDelJuego = true;
+                }
+                else
+                {
+                    SW.Stop();
+                    Player.Stats.CalcularTiempoJugado(SW);
+                    this.victoria = true;
+                }
+            }
         }
 
+
+
+
+
+
+        //public void CrearNuevoNivel()
+        //{
+        //    Nivel nuevolvl = new Nivel(GenerarImagenes());
+        //    NivelJugable = nuevolvl.GenerarNivel(Nivel);
+        //    this.fila = nuevolvl.fila;
+        //    this.columna = nuevolvl.columna;
+        //    BarraJugador = new BarraJugador(new Point(350, 960), Imagenes, 2);
+
+        //    Pelotas = null;
+        //    PowerUps = null;
+        //    Disparos = null;
+
+        //    Pelotas = new List<Pelota>();
+        //    PowerUps = new List<PowerUp>();
+        //    Disparos = new List<Disparo>();
+        //    Pelotas.Add(new Pelota(new Point(387, 936), Imagenes, 1));
+
+        //    Puntuacion = 0;
+
+        //    nuevolvl = null;
+        //    SW.Restart();
+        //}
         private Bitmap[] GenerarImagenes()
         {
             Bitmap[] Imagenes = new Bitmap[9];

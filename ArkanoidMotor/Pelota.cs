@@ -56,19 +56,12 @@ namespace ArkanoidMotor
         private void CalcularPuntos() //Calculo los 4 puntos de la pelota para luego ver si coliciona con algo
         {
             Point Actual = MiCoordenada; //Copio mi coordenada actual en un nuevo punto
-            // 26-26
 
             pArriba = new Point(Actual.X + 13, Actual.Y);
             pAbajo = new Point(Actual.X + 13, Actual.Y + 26);
 
             pDerecha = new Point(Actual.X + 26, Actual.Y + 13);
             pIzquierda = new Point(Actual.X, Actual.Y + 13);
-
-            //pArriba = new Point(Actual.X, Actual.Y - 13);
-            //pAbajo = new Point(Actual.X, Actual.Y + 13);
-
-            //pDerecha = new Point(Actual.X + 13, Actual.Y);
-            //pIzquierda = new Point(Actual.X - 13, Actual.Y);
         }
 
         public string anguloDeColicion="";
@@ -124,7 +117,10 @@ namespace ArkanoidMotor
                     }
                     return;
                 }
-                Vidas = 0;
+                if (pAbajo.Y >= 1100) 
+                {
+                    Vidas = 0;
+                }
             }  
         }
 
@@ -162,11 +158,14 @@ namespace ArkanoidMotor
         public override void Draw(Graphics Graph)
         {
             Graph.DrawImage(MiImagen[7], new RectangleF(MiCoordenada, MiTamaño));
+            //GraficarHitbox(Graph);
+        }
+        private void GraficarHitbox(Graphics Graph)
+        {
             Graph.DrawEllipse(Pens.Red,new RectangleF(pArriba,new Size(3,3)));
             Graph.DrawEllipse(Pens.Red, new RectangleF(pAbajo, new Size(3, 3)));
             Graph.DrawEllipse(Pens.Red, new RectangleF(pDerecha,new Size(3, 3)));
             Graph.DrawEllipse(Pens.Red, new RectangleF(pIzquierda,new Size(3, 3)));
         }
-        
     }
 }
