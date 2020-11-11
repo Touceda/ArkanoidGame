@@ -111,20 +111,12 @@ namespace ArkanoidMotor
                 PtosDeColicion = null;
                 Random rnd = new Random();
 
-                //int probabilidad = rnd.Next(0, 100);
-                //if (probabilidad <= ProbabilidadPowerUp)
-                //{
-                //    int pildora = rnd.Next(1, 5);
-                //    this.generePowerUp = new PowerUp(this.MiCoordenada, pildora);
-                //}
-
                 int probabilidad = rnd.Next(0, 100);
                 if (probabilidad <= ProbabilidadPowerUp)
                 {
-                    
-                    this.generePowerUp = new PowerUp(this.MiCoordenada, 4);
+                    int pildora = rnd.Next(1, 5);
+                    this.generePowerUp = new PowerUp(this.MiCoordenada, pildora);
                 }
-
             }
         }
         public virtual void Draw(Graphics Graph)

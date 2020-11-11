@@ -29,7 +29,7 @@ namespace ArkanoidMotor
             {
                 case 1:
                     {
-                        int PWP = 80;//(PowerUp Probability)
+                        int PWP = 14;//(PowerUp Probability)
                         fila = 2;
                         columna = 10;
                         Point[,] Puntos = GenerarPunto();
