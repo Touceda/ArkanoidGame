@@ -37,6 +37,7 @@
             this.lbl4 = new System.Windows.Forms.Label();
             this.lbl5 = new System.Windows.Forms.Label();
             this.lbl6 = new System.Windows.Forms.Label();
+            this.lblp = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // btbSiguiente
@@ -88,7 +89,7 @@
             this.lbl1.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.lbl1.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbl1.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.lbl1.Location = new System.Drawing.Point(12, 103);
+            this.lbl1.Location = new System.Drawing.Point(12, 94);
             this.lbl1.Name = "lbl1";
             this.lbl1.Size = new System.Drawing.Size(64, 25);
             this.lbl1.TabIndex = 3;
@@ -164,12 +165,27 @@
             this.lbl6.TabIndex = 8;
             this.lbl6.Text = "lbl6";
             // 
+            // lblp
+            // 
+            this.lblp.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblp.AutoSize = true;
+            this.lblp.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.lblp.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblp.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.lblp.Location = new System.Drawing.Point(12, 128);
+            this.lblp.Name = "lblp";
+            this.lblp.Size = new System.Drawing.Size(64, 25);
+            this.lblp.TabIndex = 9;
+            this.lblp.Text = "label1";
+            // 
             // Instrucciones
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.ClientSize = new System.Drawing.Size(600, 461);
+            this.Controls.Add(this.lblp);
             this.Controls.Add(this.lbl6);
             this.Controls.Add(this.lbl5);
             this.Controls.Add(this.lbl4);
@@ -198,5 +214,6 @@
         private System.Windows.Forms.Label lbl4;
         private System.Windows.Forms.Label lbl5;
         private System.Windows.Forms.Label lbl6;
+        private System.Windows.Forms.Label lblp;
     }
 }

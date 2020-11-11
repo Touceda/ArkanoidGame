@@ -22,7 +22,8 @@ namespace ArkanoidInterfaz
         {
             lblTitulo.Text = "Juego";
             lblIntro.Text = "Bienvenido al Arkanoid";
-            lbl1.Text = "Controles: Se utilisa wasd o las flechitas, el Space para disparar";
+            lbl1.Text = "Controles: Se utilisa wasd o las flechitas para el movimiento, ";
+            lblp.Text = "el Space para disparar y la P para pausar";
             lbl2.Text = "Hay 4 PowerUps";
             lbl3.Text = "V++: Vida extra (El maximo de vidas seran 6)";
             lbl4.Text = "Multibola: Se despliegan 4 bolas";

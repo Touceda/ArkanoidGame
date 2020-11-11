@@ -52,6 +52,12 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Instrucciones2.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Instrucciones2.Designer.cs">
+      <DependentUpon>Instrucciones2.cs</DependentUpon>
+    </Compile>
     <Compile Include="Instrucciones.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -72,11 +78,26 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StatsDeCuenta.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="StatsDeCuenta.Designer.cs">
+      <DependentUpon>StatsDeCuenta.cs</DependentUpon>
+    </Compile>
+    <Compile Include="StatsDeCuentas2.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="StatsDeCuentas2.Designer.cs">
+      <DependentUpon>StatsDeCuentas2.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Instrucciones.resx">
       <DependentUpon>Instrucciones.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Instrucciones2.resx">
+      <DependentUpon>Instrucciones2.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Login.resx">
       <DependentUpon>Login.cs</DependentUpon>
@@ -94,6 +115,12 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="StatsDeCuenta.resx">
+      <DependentUpon>StatsDeCuenta.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="StatsDeCuentas2.resx">
+      <DependentUpon>StatsDeCuentas2.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

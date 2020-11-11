@@ -80,30 +80,6 @@ namespace ArkanoidMotor
 
             return "";
         }
-        internal bool CalcularColicionDisparo(Point pArriba)
-        {
-            Point aux = pArriba;
-            if (PtosDeColicion == null)
-            {
-                return false;
-            }
-
-            foreach (var point in PtosDeColicion)
-            {
-                if (aux == point)
-                {
-                    if (vidas == 6) 
-                    {
-                        return false;
-                    }
-               
-                    this.vidas += -1;
-                    return true;
-                }
-            }
-
-            return false;
-        }
 
         int count = 0;
         Stopwatch SW = new Stopwatch();
@@ -127,7 +103,7 @@ namespace ArkanoidMotor
                     count++;
                     vidas += -1;
                     SW.Restart();
-                }    
+                }
             }
        
             if (vidas <= 0)  
@@ -135,12 +111,20 @@ namespace ArkanoidMotor
                 PtosDeColicion = null;
                 Random rnd = new Random();
 
+                //int probabilidad = rnd.Next(0, 100);
+                //if (probabilidad <= ProbabilidadPowerUp)
+                //{
+                //    int pildora = rnd.Next(1, 5);
+                //    this.generePowerUp = new PowerUp(this.MiCoordenada, pildora);
+                //}
+
                 int probabilidad = rnd.Next(0, 100);
                 if (probabilidad <= ProbabilidadPowerUp)
                 {
-                    int pildora = rnd.Next(1, 5);
-                    this.generePowerUp = new PowerUp(this.MiCoordenada, pildora);
+                    
+                    this.generePowerUp = new PowerUp(this.MiCoordenada, 4);
                 }
+
             }
         }
         public virtual void Draw(Graphics Graph)

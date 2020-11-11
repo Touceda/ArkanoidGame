@@ -42,6 +42,8 @@
             // label1
             // 
             this.label1.AccessibleRole = System.Windows.Forms.AccessibleRole.None;
+            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 40F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
@@ -68,6 +70,7 @@
             // 
             // btbNuevaPartida
             // 
+            this.btbNuevaPartida.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btbNuevaPartida.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.btbNuevaPartida.FlatAppearance.BorderColor = System.Drawing.Color.Black;
             this.btbNuevaPartida.FlatAppearance.BorderSize = 0;
@@ -83,6 +86,8 @@
             // 
             // btbInstrucciones
             // 
+            this.btbInstrucciones.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.btbInstrucciones.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.btbInstrucciones.FlatAppearance.BorderColor = System.Drawing.Color.Black;
             this.btbInstrucciones.FlatAppearance.BorderSize = 0;
@@ -98,6 +103,8 @@
             // 
             // btbSalir
             // 
+            this.btbSalir.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.btbSalir.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.btbSalir.FlatAppearance.BorderColor = System.Drawing.Color.Black;
             this.btbSalir.FlatAppearance.BorderSize = 0;
@@ -117,6 +124,8 @@
             // 
             // btbEstadisticas
             // 
+            this.btbEstadisticas.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.btbEstadisticas.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.btbEstadisticas.FlatAppearance.BorderColor = System.Drawing.Color.Black;
             this.btbEstadisticas.FlatAppearance.BorderSize = 0;

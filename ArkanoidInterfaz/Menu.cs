@@ -23,8 +23,6 @@ namespace ArkanoidInterfaz
         Login FormLogin = new Login();
         Form1 Juego;
 
-        Instrucciones instrucciones = new Instrucciones();
-
         private void Menu_Load(object sender, EventArgs e)
         {
             FormLogin.ShowDialog();
@@ -59,6 +57,7 @@ namespace ArkanoidInterfaz
 
             Player.NivelActual = 1;
             Player.Puntuacion = 0;
+            Player.ActualizarCuentaStats();
             Juego = new Form1(Player);
             Juego.ShowDialog();
             Juego.Close();
@@ -67,17 +66,25 @@ namespace ArkanoidInterfaz
 
         private void btbInstrucciones_Click(object sender, EventArgs e)
         {
+            Instrucciones instrucciones = new Instrucciones();
             instrucciones.ShowDialog();
             instrucciones.Close();
+            Instrucciones2 instrucciones2 = new Instrucciones2();
+            instrucciones2.ShowDialog();
+            instrucciones2.Close();
         }
 
         private void btbEstadisticas_Click(object sender, EventArgs e)
         {
-
+            Player.ActualizarCuentaStats();
+            StatsDeCuenta stc = new StatsDeCuenta(Player.ObtenerStats(), Player.ObtenerListaDeLogs(), Player.Nombre);
+            stc.ShowDialog();
+            stc.Close();
         }
 
         private void btbSalir_Click(object sender, EventArgs e)
         {
+            Player.ActualizarCierre();
             Application.Exit();
         }
 

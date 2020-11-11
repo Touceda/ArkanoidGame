@@ -9,7 +9,6 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using ArkanoidMotor;
 
-
 namespace ArkanoidInterfaz
 {
     public partial class Form1 : Form

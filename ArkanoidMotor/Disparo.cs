@@ -23,6 +23,9 @@ namespace ArkanoidMotor
 
         public bool saliDelMapaOcolicione = false;
 
+        public Point Pcolicion1;
+        public Point Pcolicion2;
+        public Point Pcolicion3;
         public Disparo(Point Coordenada)
         {
             this.miCoordenada = Coordenada;
@@ -32,17 +35,41 @@ namespace ArkanoidMotor
         public void Update()
         {
             this.miCoordenada.Y += -12;
-            if (this.miCoordenada.Y < -100) 
+            Pcolicion1 = MiCoordenada;
+            Pcolicion2 = new Point(MiCoordenada.X + 8, MiCoordenada.Y);
+            Pcolicion3 = new Point(MiCoordenada.X + 16, MiCoordenada.Y);
+
+            if (this.miCoordenada.Y < -100)
             {
-                saliDelMapaOcolicione = true;
+                 saliDelMapaOcolicione = true;
             }
         }
 
+        internal bool CalcularColicion(List<Point> pListColicion, int vidas)
+        {
+            foreach (var point in pListColicion)
+            {
+                if (point == Pcolicion1|| point == Pcolicion2 || point == Pcolicion3)
+                {
+                    if (vidas == 6)
+                    {
+                        this.saliDelMapaOcolicione = true;
+                        return false;
+                    }
+                    this.saliDelMapaOcolicione = true;
+                    return true;
+                }
+            }
 
+            return false;
+        }
 
         public void Draw(Graphics Graph)
         {
             Graph.DrawImage(Properties.Resources.Disparo, miCoordenada);
+            Graph.DrawEllipse(Pens.Red, new RectangleF(Pcolicion1, new Size(3, 3)));
+            Graph.DrawEllipse(Pens.Red, new RectangleF(Pcolicion2, new Size(3, 3)));
+            Graph.DrawEllipse(Pens.Red, new RectangleF(Pcolicion3, new Size(3, 3)));
         }
     }
 }

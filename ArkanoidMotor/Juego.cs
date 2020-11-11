@@ -107,14 +107,15 @@ namespace ArkanoidMotor
                     string anguloDeColicion = NivelJugable[i, x].CalcularColicionPelota(Pelota.pArriba, Pelota.pAbajo, Pelota.pDerecha, Pelota.pIzquierda);
                     if (anguloDeColicion != "")
                     {
-                        CalcularPts(NivelJugable[i, x].Vidas);//Sumo los pts
+                        CalcularPts(NivelJugable[i, x].Vidas);//Sumo los pts    
                         
-                        Pelota.anguloDeColicion = anguloDeColicion;
-                        //Miro si se genero un powerUp
-                        if (NivelJugable[i, x].generePowerUp != null)
+                        Pelota.anguloDeColicion = anguloDeColicion;//Ajusto de que forma reacciona la pelota
+                        
+                        if (NivelJugable[i, x].generePowerUp != null)//Miro si se genero un powerUp
                         {
                             PowerUps.Add(NivelJugable[i, x].generePowerUp);
                         }
+
                         return;
                     }
                 }
@@ -160,23 +161,39 @@ namespace ArkanoidMotor
                 {
                     for (int x = 0; x < columna; x++) //Recorro todas las barras y si detecto una colicion, guardo un string diciendo que parte de la pelota coliciono, y luego cierro el metodo con un return (Si coliciona con un objeto, no lo dejo calculando los demas, ya que solo puede colicionar una sola ves)
                     {
-                        if (NivelJugable[i, x].CalcularColicionDisparo(new Point(bala.MiCoordenada.X+10,bala.MiCoordenada.Y)) == true)
+
+                        if (NivelJugable[i, x].PtosDeColicion != null)//Primero veo si el objeto existe o ya fue destruido
                         {
-                            bala.saliDelMapaOcolicione = true;
+                            if (bala.CalcularColicion(NivelJugable[i, x].PtosDeColicion, NivelJugable[i, x].Vidas) == true)//Calculo la colicion si es true
+                            {
+                                NivelJugable[i, x].Vidas += -1;//Le saco una vida
+                                if (NivelJugable[i, x].Vidas <= 0) //Si se quedo sin vidas, elimino sus ptosdecolicion (asi pasa a estar muerto)
+                                {
+                                    NivelJugable[i, x].PtosDeColicion = null;
+                                }
+                            }
+                            
                         }
+                        
                     }
                 }
             }
 
-            //aca recorro las balas Actualizandolas y eliminando las que ya cumplieron su funcion
-            for (int disparo = 0; disparo < Disparos.Count; disparo++)
+            List<Disparo> disparosVivos = new List<Disparo>();
+            foreach (var bala in Disparos) //aca recorro las balas y me quedo con las que sig vivas
             {
-                Disparos[disparo].Update();
-                if (Disparos[disparo].saliDelMapaOcolicione == true)
+                if (bala.saliDelMapaOcolicione == false)
                 {
-                    Disparos.Remove(Disparos[disparo]);
+                    disparosVivos.Add(bala);
                 }
             }
+
+            this.Disparos = disparosVivos;
+
+            foreach (var bala in Disparos)//Actualizo los disparos
+            {
+                bala.Update();
+            }         
         }
         private void UpdatePowerUps(List<Point> PtsColicionBarras) 
         {

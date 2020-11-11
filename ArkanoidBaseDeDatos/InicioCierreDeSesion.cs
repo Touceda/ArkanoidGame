@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Data.Sql;
 using System.Data.SqlClient;
+using System.Data;
 
 namespace ArkanoidBaseDeDatos
 {
@@ -15,31 +16,38 @@ namespace ArkanoidBaseDeDatos
 
         private int id;
 
-        private string nombre;
-        public string Nombre { get { return nombre; } set { value = nombre; } }
+        private string usuario;
+        public string Usuario { get { return usuario; } set { value = usuario; } }
 
         private string inicioDeSesion;
         public string InicioDeSesion { get { return inicioDeSesion; } set { value = inicioDeSesion; } }
         public InicioCierreDeSesion(string nombre)
         {
-            this.nombre = nombre;
+            this.usuario = nombre;
             inicioDeSesion = DateTime.Now.ToString();
             conexion = new ConexionSql();
         }
 
         public void RegistrarNuevoInicio()
         {
-            //SQLCommand.ExecuteScalar()
             try
             {
                 conexion.Conectar();
                 using (SqlCommand comando = new SqlCommand())
                 {
+                    int idMasAlto = 0;
+                    DataTable Ids = new DataTable();
                     comando.CommandType = System.Data.CommandType.StoredProcedure;
                     comando.Connection = Conexion.Conection;
                     comando.CommandText = "BuscarIDRegistroDeLogeos";
-                    int idMasAlto = Convert.ToInt32(comando.ExecuteScalar());
-                    idMasAlto++;                 
+                    using (SqlDataAdapter DA = new SqlDataAdapter())
+                    {
+                        DA.SelectCommand = comando; //Le paso el procAlmacenado y la conexion al comando
+                        DA.Fill(Ids); //Ejecuto comando y le paso la tabla para rellenar
+                    }
+                    idMasAlto = IdMasAlto(Ids);
+                    idMasAlto++;
+                    this.id = idMasAlto;
                 }
 
                 using (SqlCommand comando = new SqlCommand())
@@ -47,105 +55,83 @@ namespace ArkanoidBaseDeDatos
                     comando.CommandType = System.Data.CommandType.StoredProcedure;
                     comando.Connection = Conexion.Conection;
                     comando.CommandText = "InsertarRegistroDeLogeos";
-                    comando.Parameters.AddWithValue("@usuario", );
-                    comando.Parameters.AddWithValue("@nivelactual", nivel);
-                    comando.Parameters.AddWithValue("@puntuacionactual", pts);
+                    comando.Parameters.AddWithValue("@id",this.id );
+                    comando.Parameters.AddWithValue("@usuario", usuario);
+                    comando.Parameters.AddWithValue("@iniciodesesion", this.inicioDeSesion);
+                    comando.Parameters.AddWithValue("@cierredesesion", DateTime.Now.ToString());
                     comando.ExecuteNonQuery();
                 }
-
                 conexion.Desconectar();     
             }
             catch (Exception ex)
             {
+                return;
+            }
+        }
+        private int IdMasAlto(DataTable IDs)
+        {
+            int idMasAlto = 0;
+            foreach (DataRow fila in IDs.Rows)
+            {              
+                int id = int.Parse(fila[0].ToString());
 
+                if (id>idMasAlto)
+                {
+                    idMasAlto = id;
+                }
+            }
+            return idMasAlto;
+        }
+
+        public void ActualizarInicioCierre()//Actualizo la hora de cierre de sesion
+        {
+            try
+            {
+                Conexion.Conectar();
+                using (SqlCommand comando = new SqlCommand())
+                {
+                    comando.CommandType = System.Data.CommandType.StoredProcedure;
+                    comando.Connection = Conexion.Conection;
+                    comando.CommandText = "ActualizarRegistroDeLogeos";
+                    comando.Parameters.AddWithValue("@id", this.id);
+                    comando.Parameters.AddWithValue("@usuario", usuario);
+                    comando.Parameters.AddWithValue("@iniciodesesion", this.inicioDeSesion);
+                    comando.Parameters.AddWithValue("@cierredesesion", DateTime.Now.ToString());
+                    comando.ExecuteNonQuery();
+                }
+                Conexion.Desconectar();
+            }
+            catch (Exception ex)
+            {
+                return;
+            }
+        }
+        public DataTable ObtenerLogs()
+        {
+            try
+            {
+                DataTable stats = new DataTable();
+                conexion.Conectar();
+                using (SqlCommand comando = new SqlCommand())
+                {
+                    comando.CommandType = System.Data.CommandType.StoredProcedure;
+                    comando.Connection = Conexion.Conection;
+                    comando.CommandText = "BuscarRegistroDeLog";
+                    comando.Parameters.AddWithValue("@usuario", this.usuario);
+                    using (SqlDataAdapter DA = new SqlDataAdapter())
+                    {
+                        DA.SelectCommand = comando; //Le paso el procAlmacenado y la conexion al comando
+                        DA.Fill(stats); //Ejecuto comando y le paso la tabla para rellenar
+                    }
+                }
+                conexion.Desconectar();
+                return stats;
+            }
+            catch (Exception)
+            {
+                return null;
             }
         }
 
-        //public DataTable ActualizarInicioCierre()//Extraigo la tabla de usuarios
-        //{
-        //    DataTable tabla = new DataTable();
-        //    Conexion.Conectar();
-        //    using (SqlCommand comando = new SqlCommand())
-        //    {
-        //        comando.CommandType = System.Data.CommandType.StoredProcedure;
-        //        comando.Connection = Conexion.Conection;
-        //        comando.CommandText = "BuscarUsuario";
-        //        using (SqlDataAdapter DA = new SqlDataAdapter())
-        //        {
-        //            DA.SelectCommand = comando; //Le paso el procAlmacenado y la conexion al comando
-        //            DA.Fill(tabla); //Ejecuto comando y le paso la tabla para rellenar
-        //        }
-        //    }
-        //    Conexion.Desconectar();
-        //    return tabla;
-        //}
-        //public string ObtenerInformacion(string usuario, string contraseña)
-        //{
-        //    try
-        //    {
-        //        conexion.Conectar();
-        //        using (SqlCommand comando = new SqlCommand())
-        //        {
-        //            comando.CommandType = System.Data.CommandType.StoredProcedure;
-        //            comando.Connection = Conexion.Conection;
-        //            comando.CommandText = "BuscarUsuario";
-        //            using (var Lector = comando.ExecuteReader())
-        //            {
-        //                while (Lector.Read())
-        //                {
-        //                    string sqlUsuario = Lector.GetString(0).ToString();
-
-        //                    if (sqlUsuario == usuario)
-        //                    {
-        //                        return "Este nombre de Usuario ya existe, seleccione otro";
-        //                    }
-        //                }
-        //            }
-        //        }
-        //        using (SqlCommand comando = new SqlCommand())
-        //        {
-        //            comando.CommandType = System.Data.CommandType.StoredProcedure;
-        //            //comando.CommandText = "Insert Into RegistroDeUsuarios (Usuario,Contraseña) values (@usuario,@contra)";
-        //            comando.CommandText = "RegistrarUsuario";
-        //            comando.Connection = Conexion.Conection;
-        //            comando.Parameters.AddWithValue("@usuario", usuario);
-        //            comando.Parameters.AddWithValue("@contra", contraseña);
-        //            comando.Parameters.AddWithValue("@nivel", 1);
-        //            comando.Parameters.AddWithValue("@puntuacion", 0);
-        //            comando.ExecuteNonQuery();
-        //        }
-
-
-        //        conexion.Desconectar();
-        //        return "Felicidades Usuario Registrado con exito";
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return ex.ToString();
-        //    }
-        //}//Creo nuevos usuarios
-        //public void ActualizarUsuario(string usuario, int nivel, int pts)//Actualizo usuarios que ya existen
-        //{
-        //    try
-        //    {
-        //        conexion.Conectar();
-        //        using (SqlCommand comando = new SqlCommand())
-        //        {
-        //            comando.CommandType = System.Data.CommandType.StoredProcedure;
-        //            comando.Connection = Conexion.Conection;
-        //            comando.CommandText = "ActualizarUsuario";
-        //            comando.Parameters.AddWithValue("@usuario", usuario);
-        //            comando.Parameters.AddWithValue("@nivelactual", nivel);
-        //            comando.Parameters.AddWithValue("@puntuacionactual", pts);
-        //            comando.ExecuteNonQuery();
-        //        }
-        //        conexion.Desconectar();
-        //    }
-        //    catch (Exception)
-        //    {
-        //        conexion.Desconectar();
-        //        return;
-        //    }
-        //}
     }
 }
